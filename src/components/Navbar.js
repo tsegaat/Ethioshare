@@ -30,7 +30,7 @@ export default function Navbar() {
                         <Link to="/">
                             <img
                                 className="block lg:block h-8 w-auto"
-                                src="https://tailwindui.com/img/logos/workflow-logo-indigo-500-mark-white-text.svg"
+                                src="https://tailwindui.com/img/logos/workflow-mark-indigo-600.svg"
                                 alt="Ethioshare"
                             />
                         </Link>

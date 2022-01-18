@@ -15,7 +15,7 @@ export default function Landing() {
           <div className="py-2.5 top-1/2 text-center inset-x-0 text-4xl lg:text-6xl prata font-bold">Exchange <br /> Ethiopian Shares</div>
           <p className="mt-3.5 text-center text-md lg:text-xl prata">All the share in one place!</p>
           <div class="pt-2 relative mx-auto text-gray-600 my-10">
-            <input class="border-2 h-10 rounded-lg text-md focus:outline-none w-80 p-7 lg:text-lg"
+            <input class="border-2 h-10 rounded-lg text-md focus:outline-none w-60 lg:w-80 p-7 lg:text-lg"
               type="search" name="search" placeholder="Search Company" />
             <button type="submit" class="absolute right-0 top-0 mt-6 mr-4">
               <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
