@@ -2,7 +2,7 @@ import React from "react";
 import Navbar from "../components/Navbar";
 import { Link } from "@reach/router";
 
-export default function Example() {
+export default function SignIn() {
     return (
         <>
             <Navbar></Navbar>

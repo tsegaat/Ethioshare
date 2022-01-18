@@ -2,7 +2,7 @@ import React from "react";
 import Navbar from "../components/Navbar";
 import { Link } from "@reach/router";
 
-export default function Example() {
+export default function Create() {
     return (
         <>
             <Navbar></Navbar>
