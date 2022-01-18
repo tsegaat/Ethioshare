@@ -5,14 +5,6 @@ import { Link } from "@reach/router";
 export default function Example() {
     return (
         <>
-            {/*
-        This example requires updating your template:
-
-        ```
-        <html class="h-full bg-gray-50">
-        <body class="h-full">
-        ```
-      */}
             <Navbar></Navbar>
             <div className="min-h-full flex items-baseline justify-center py-12 px-4 sm:px-6 lg:px-8 ">
                 <div className="max-w-md w-full space-y-8">
