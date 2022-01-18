@@ -1,0 +1,32 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body{
+    font-family: "News Cycle";
+}
+
+.column{
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    flex-direction: column;
+}
+
+.gradient{
+    background: linear-gradient(to left, #fff, #1652f0);
+}
+
+.prata{
+    font-family: "Prata";
+}
+
+.icon-stack{
+    position: relative;
+    display: inline-block;
+    width: 2em;
+    height: 2em;
+    line-height: 2em;
+    vertical-align: middle;
+}
