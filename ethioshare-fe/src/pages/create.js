@@ -22,7 +22,7 @@ export default function Create() {
                             </a>
                         </p>
                     </div>
-                    <form className="mt-8 space-y-6" action="#" method="POST">
+                    <form className="mt-8 space-y-6" action="http://localhost:8000/users/add" method="POST">
                         <input type="hidden" name="remember" defaultValue="true" />
                         <div>
                             <div className="flex justify-between mt-1 relative rounded-md ">
@@ -31,8 +31,8 @@ export default function Create() {
                                 </label>
                                 <input
                                     type="text"
-                                    name="firstname"
-                                    id="firstname"
+                                    name="firstName"
+                                    id="firstName"
                                     required
                                     className="focus:ring-indigo-500 focus:border-indigo-500 py-4 w-1/2 block sm:text-sm border-gray-300 rounded-md"
                                     placeholder="First Name"
@@ -42,8 +42,8 @@ export default function Create() {
                                 </label>
                                 <input
                                     type="text"
-                                    name="lastname"
-                                    id="lastname"
+                                    name="lastName"
+                                    id="lastName"
                                     required
                                     className="focus:ring-indigo-500 focus:border-indigo-500 py-4 w-1/2 ml-4 block sm:text-sm border-gray-300 rounded-md"
                                     placeholder="Last Name"
@@ -56,7 +56,7 @@ export default function Create() {
                                     Email address
                                 </label>
                                 <input
-                                    id="email-address"
+                                    id="email"
                                     name="email"
                                     type="email"
                                     autoComplete="email"
@@ -78,9 +78,13 @@ export default function Create() {
                                     required
                                     className="appearance-none rounded relative block w-full px-3 py-4 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
                                     placeholder="Username"
+                                    minLength={5}
                                 />
                             </div>
                         </div>
+                        {/* TODO: Check if the password and the confimation are the same */}
+                        {/* TODO: Check if the user used a strong password */}
+                        {/* TODO: Encrypt password before sendind to the backend */}
                         <div className="shadow-sm -space-y-px">
                             <div>
                                 <div className="flex justify-between mt-1 relative rounded-md ">
@@ -94,6 +98,7 @@ export default function Create() {
                                         required
                                         className="focus:ring-indigo-500 focus:border-indigo-500 py-4 w-1/2 block sm:text-sm border-gray-300 rounded-md"
                                         placeholder="Create Password"
+                                        minLength={8}
                                     />
                                     <label htmlFor="confirm-password" className="sr-only">
                                         Confirm Password
@@ -105,6 +110,7 @@ export default function Create() {
                                         required
                                         className="focus:ring-indigo-500 focus:border-indigo-500 py-4 w-1/2 ml-4 block text-sm lg:text-md border-gray-300 rounded-md"
                                         placeholder="Confirm Password"
+                                        minLength={8}
                                     />
                                 </div>
                             </div>
