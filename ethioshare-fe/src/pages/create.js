@@ -29,7 +29,7 @@ export default function Create() {
 
     // FIXME There is room to improve the redunduncy of this process use less refrences.
     const passFunc = () => {
-        if (passwordRef.current.type == "password") {
+        if (passwordRef.current.type === "password") {
             passwordRef.current.type = "text"
             passwordShowIconRef.current.style = "display: none"
             passwordHideIconRef.current.style = "display: block"
@@ -41,7 +41,7 @@ export default function Create() {
     }
 
     const confirmPassFunc = () => {
-        if (confirmPasswordRef.current.type == "password") {
+        if (confirmPasswordRef.current.type === "password") {
             confirmPasswordRef.current.type = "text"
             confirmPasswordShowIconRef.current.style = "display: none"
             confirmPasswordHideIconRef.current.style = "display: block"
@@ -129,7 +129,6 @@ export default function Create() {
                                 </div>
                             </div>
                         </div>
-                        {/* TODO: Encrypt password before sending to the backend */}
                         <div className="shadow-sm -space-y-px">
 
                             <label htmlFor="password" className="sr-only">

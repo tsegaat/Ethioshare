@@ -7,7 +7,7 @@ export default function SignIn() {
     const passwordShowIconRef = React.createRef()
     const passwordHideIconRef = React.createRef()
     const passFunc = () => {
-        if (passwordRef.current.type == "password") {
+        if (passwordRef.current.type === "password") {
             passwordRef.current.type = "text"
             passwordShowIconRef.current.style = "display: none"
             passwordHideIconRef.current.style = "display: block"
