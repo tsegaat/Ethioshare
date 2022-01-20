@@ -1,6 +1,7 @@
 import React from "react";
 import Navbar from "../components/Navbar";
 import { Link } from "@reach/router";
+import axios from "axios"
 
 export default function Create() {
     const passwordRef = React.createRef()
@@ -9,24 +10,55 @@ export default function Create() {
     const passwordHideIconRef = React.createRef()
     const confirmPasswordShowIconRef = React.createRef()
     const confirmPasswordHideIconRef = React.createRef()
-    const passwordWarning = React.createRef()
+    const warnings = React.createRef()
     const formRef = React.createRef()
 
-    const onBlurFunc = () => {
-        if (passwordRef.current.value !== confirmPasswordRef.current.value) {
-            passwordWarning.current.style = "display: block"
-            const submitbutton = formRef.current.children[7]
-            submitbutton.disabled = true
-        } else {
-            passwordWarning.current.style = "display: none"
-            formRef.current.action = "http://localhost:8000/users/add"
-            const submitbutton = formRef.current.children[7]
-            submitbutton.disabled = false
+    const submit = (e) => {
+        e.preventDefault();
+        const formElements = []
+        for (let i = 0; i < 3; i++) {
+            formElements.push(formRef.current.children[i])
         }
+
+        const firstName = formElements[0].children[0].children[1].value
+        const lastName = formElements[0].children[0].children[3].value
+        const email = formElements[1].children[0].children[0].children[1].value
+        const username = formElements[1].children[0].children[0].children[3].value
+        const password = formElements[2].children[1].children[0].value
+
+        const user = { firstName, lastName, email, username, password }
+
+        axios.post("http://localhost:8000/users/add", user).then(res => {
+            if (res.data.userCreated) {
+                // Go to the next page
+                alert("User created")
+            } else {
+                const cause = res.data.errorCause
+                if (cause === "email") {
+                    warnings.current.style = "display: block"
+                    warnings.current.innerHTML = "Email already exits"
+                } else if (cause === "username") {
+                    warnings.current.style = "display: block"
+                    warnings.current.innerHTML = "Username already exits"
+                }
+            }
+        })
     }
 
 
-
+    const onBlurFunc = () => {
+        if (passwordRef.current.value !== confirmPasswordRef.current.value) {
+            warnings.current.style = "display: block"
+            warnings.current.innerHTML = "Passwords don't match"
+            const submitbutton = formRef.current.children[6]
+            submitbutton.disabled = true
+        } else {
+            warnings.current.style = "display: none"
+            warnings.current.innerHTML = "Passwords don't match"
+            const submitbutton = formRef.current.children[6]
+            submitbutton.disabled = false
+        }
+    }
     // FIXME There is room to improve the redunduncy of this process use less refrences.
     const passFunc = () => {
         if (passwordRef.current.type === "password") {
@@ -66,13 +98,10 @@ export default function Create() {
                         <h2 className="mt-6 text-center text-3xl lg:text-4xl font-extrabold text-gray-900">Create your account</h2>
                         <p className="mt-2 text-center text-md text-gray-600">
                             Or{' '}
-                            <a href="#" className="font-medium text-blue-600 hover:text-blue-700 hover:underline">
-                                <Link to="../sign-in">sign in to your account</Link>
-                            </a>
+                            <Link className="font-medium text-blue-600 hover:text-blue-700 hover:underline" to="../sign-in">sign in to your account</Link>
                         </p>
                     </div>
-                    <form className="mt-8 space-y-6" method="POST" ref={formRef}>
-                        <input type="hidden" name="remember" defaultValue="true" />
+                    <form className="mt-8 space-y-6" onSubmit={submit} ref={formRef}>
                         <div>
                             <div className="flex justify-between mt-1 relative rounded-md ">
                                 <label htmlFor="first-name" className="sr-only">
@@ -83,7 +112,7 @@ export default function Create() {
                                     name="firstName"
                                     id="firstName"
                                     required
-                                    className="focus:ring-indigo-500 focus:border-indigo-500 py-4 w-1/2 block sm:text-sm border-gray-300 rounded-md"
+                                    className="focus:ring-indigo-500 focus:border-indigo-500 py-4 w-1/2 block border-gray-300 rounded-md"
                                     placeholder="First Name"
                                 />
                                 <label htmlFor="last-name" className="sr-only">
@@ -94,7 +123,7 @@ export default function Create() {
                                     name="lastName"
                                     id="lastName"
                                     required
-                                    className="focus:ring-indigo-500 focus:border-indigo-500 py-4 w-1/2 ml-4 block sm:text-sm border-gray-300 rounded-md"
+                                    className="focus:ring-indigo-500 focus:border-indigo-500 py-4 w-1/2 ml-4 block border-gray-300 rounded-md"
                                     placeholder="Last Name"
                                 />
                             </div>
@@ -111,7 +140,7 @@ export default function Create() {
                                         type="email"
                                         autoComplete="email"
                                         required
-                                        className="appearance-none rounded relative block w-full px-3 py-4 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                                        className="appearance-none rounded relative block w-full px-3 py-4 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10"
                                         placeholder="Email address"
                                     />
                                     <label htmlFor="username" className="sr-only">
@@ -122,7 +151,7 @@ export default function Create() {
                                         name="username"
                                         type="username"
                                         required
-                                        className="appearance-none rounded relative block w-full px-3 py-4 ml-4 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                                        className="appearance-none rounded relative block w-full px-3 py-4 ml-4 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10"
                                         placeholder="Username"
                                         minLength={5}
                                     />
@@ -141,17 +170,17 @@ export default function Create() {
                                     id="password"
                                     required
                                     ref={passwordRef}
-                                    className="focus:ring-indigo-500 focus:border-indigo-500 relative w-full py-4 block sm:text-sm border-gray-300 rounded-md"
+                                    className="focus:ring-indigo-500 focus:border-indigo-500 relative w-full py-4 block border-gray-300 rounded-md"
                                     placeholder="Create Password"
                                     minLength={8}
                                     onBlur={onBlurFunc}
                                 />
                                 <svg xmlns="http://www.w3.org/2000/svg" className="absolute h-5 w-5 top-[30%] right-[5%]" fill="none" viewBox="0 0 24 24" stroke="currentColor" onClick={passFunc} ref={passwordShowIconRef}>
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
                                 </svg>
-                                <svg xmlns="http://www.w3.org/2000/svg" class="absolute h-5 w-5 top-[30%] right-[5%] hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor" onClick={passFunc} ref={passwordHideIconRef}>
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21" />
+                                <svg xmlns="http://www.w3.org/2000/svg" className="absolute h-5 w-5 top-[30%] right-[5%] hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor" onClick={passFunc} ref={passwordHideIconRef}>
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21" />
                                 </svg>
                             </div>
                         </div>
@@ -166,22 +195,21 @@ export default function Create() {
                                     id="confirmPassword"
                                     required
                                     ref={confirmPasswordRef}
-                                    className="focus:ring-indigo-500 focus:border-indigo-500 w-full py-4 block text-sm lg:text-md border-gray-300 rounded-md"
+                                    className="focus:ring-indigo-500 focus:border-indigo-500 w-full py-4 block border-gray-300 rounded-md"
                                     placeholder="Confirm Password"
                                     minLength={8}
                                     onBlur={onBlurFunc}
                                 />
                                 <svg xmlns="http://www.w3.org/2000/svg" className="absolute h-5 w-5 top-[30%] right-[5%]" fill="none" viewBox="0 0 24 24" stroke="currentColor" onClick={confirmPassFunc} ref={confirmPasswordShowIconRef}>
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
                                 </svg>
-                                <svg xmlns="http://www.w3.org/2000/svg" class="absolute h-5 w-5 top-[30%] right-[5%] hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor" onClick={confirmPassFunc} ref={confirmPasswordHideIconRef}>
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21" />
+                                <svg xmlns="http://www.w3.org/2000/svg" className="absolute h-5 w-5 top-[30%] right-[5%] hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor" onClick={confirmPassFunc} ref={confirmPasswordHideIconRef}>
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21" />
                                 </svg>
                             </div>
                         </div>
-                        <div className="shadow-sm -space-y-px text-red-600 text-sm hidden" ref={passwordWarning}>
-                            Passwords don't match
+                        <div className="shadow-sm -space-y-px text-red-600 text-sm lg:text-base hidden" ref={warnings}>
                         </div>
                         <div className="flex items-center justify-between">
                             <div className="flex items-center">

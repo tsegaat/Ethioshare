@@ -2,29 +2,27 @@ const router = require("express").Router()
 let Users = require("../models/users.model")
 const bcrypt = require('bcrypt')
 
-// //to compare password that user supplies in the future
-// var hash = getFromDB(..);
-// bcrypt.compare(userSuppliedPassword, hash, function (err, doesMatch) {
-//     if (doesMatch) {
-//         //log him in
-//     } else {
-//         //go away
-//     }
-// });
-
 router.route('/').get((req, res) => {
     const email = req.query.email
+    const password = req.query.pass
     Users.find({ email: email }, function (err, user) {
         if (user.length === 0) {
             res.json({
                 userExist: false
             })
         } else {
-            const password = user[0].password
-            res.json({
-                userExist: true,
-                email,
-                password
+            bcrypt.compare(password, user[0].password, (err, bol) => {
+                if (bol) {
+                    res.json({
+                        userExist: true,
+                        correct: true
+                    })
+                } else {
+                    res.json({
+                        userExist: true,
+                        correct: false
+                    })
+                }
             })
         }
     });
@@ -43,9 +41,14 @@ router.route('/add').post((req, res) => {
         }
         const newUser = new Users(user)
         newUser.save()
-            .then(() => res.json("Next page after user creates his account"))
-            .catch(err => res.json({ userExist: true, errorReturned: err }))
+            .then(() => res.json({ userCreated: true }))
+            .catch(err => {
+                const error = err.keyPattern
+                const errorCause = Object.keys(error)[0]
+                res.json({ userCreated: false, errorCause: errorCause })
+            })
     });
+
 })
 
 module.exports = router

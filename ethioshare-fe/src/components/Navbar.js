@@ -15,9 +15,9 @@ export default function Navbar() {
     }
 
     const links = []
-    if (page == "create") {
+    if (page === "create") {
         links.push(navigation['createSign-in'], navigation['createCreate'])
-    } else if (page == "sign-in") {
+    } else if (page === "sign-in") {
         links.push(navigation['sign-inSign-in'], navigation['sign-inCreate'])
     } else {
         links.push(navigation['indexSign-in'], navigation['indexCreate'])
@@ -57,8 +57,8 @@ export default function Navbar() {
                         {/* Profile dropdown */}
                         <Menu as="div" className="ml-3 relative">
                             <div>
-                                <Menu.Button className="bg-gray-800 flex text-sm rounded-full">
-                                    <button className='bg-blue-700 text-white pointer px-2.5 py-2.5 rounded-md'>{links[1]}</button>
+                                <Menu.Button className="bg-blue-700 text-white pointer px-2.5 py-2.5 rounded-md">
+                                    {links[1]}
                                 </Menu.Button>
                             </div>
                         </Menu>

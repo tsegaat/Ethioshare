@@ -3,6 +3,7 @@ import Navbar from "../components/Navbar";
 import { Link } from "@reach/router";
 
 export default function ForgetPass() {
+    // TODO: Make this forget password page work by sending an email to the user
     return (
         <>
             <Navbar></Navbar>
@@ -17,9 +18,7 @@ export default function ForgetPass() {
                         <h2 className="mt-6 text-center text-3xl lg:text-4xl font-extrabold text-gray-900">Forgot your password?</h2>
                         <p className="mt-2 text-center text-md text-gray-600">
                             Or{' '}
-                            <a href="#" className="font-medium text-blue-600 hover:text-blue-700 hover:underline">
-                                <Link to="../sign-in">sign in to your account</Link>
-                            </a>
+                            <Link className="font-medium text-blue-600 hover:text-blue-700 hover:underline" to="../sign-in">sign in to your account</Link>
                         </p>
                     </div>
                     <form className="mt-8 space-y-6" action="#" method="POST">
