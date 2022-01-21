@@ -1,6 +1,7 @@
 const express = require("express")
 const cors = require("cors")
 const mongoose = require('mongoose')
+const bodyParser = require("body-parser")
 const companySchema = require("./models/company.model")
 const cloudinary = require('cloudinary').v2;
 
@@ -13,7 +14,7 @@ cloudinary.config({
 })
 
 const app = express()
-const PORT = process.env.PORT || 8000
+const PORT = process.env.PORT
 
 app.use(cors())
 app.use(express.json());
@@ -39,19 +40,14 @@ app.post('/add', (req, res) => {
     const companyExchangeScore = req.body.companyExchangeScore
     const companyEmail = req.body.companyEmail
 
-    cloudinary.uploader.upload(companyLogo, { folder: 'companies', use_filename: true }, result => {
-        const company = new companySchema({
+    cloudinary.uploader.upload(companyLogo, { public_id: `companies/${companyName}`, use_filename: true }).then(result => {
+        const company = {
             companyName, companyLogo: result.secure_url, companyPrice, companyExchangeScore, companyEmail
-        })
-
-        company.save().then(res => {
-            res.json({ companyCreated: true })
-        })
-            .catch(err => {
-                const error = err.keyPattern
-                const errorCause = Object.keys(error)[0]
-                res.json({ companyCreated: false, errorCause: errorCause })
-            })
+        }
+        const newCompany = new companySchema(company)
+        newCompany.save()
+            .then(() => res.json("Company Created!!!"))
+            .catch(err => res.json(err))
     })
 })
 
