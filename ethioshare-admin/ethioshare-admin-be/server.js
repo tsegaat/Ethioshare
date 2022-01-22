@@ -39,10 +39,12 @@ app.post('/add', (req, res) => {
     const companyPrice = req.body.companyPrice
     const companyExchangeScore = req.body.companyExchangeScore
     const companyEmail = req.body.companyEmail
+    const companySector = req.body.companySector
+    const companyDescription = req.body.companySector
 
     cloudinary.uploader.upload(companyLogo, { public_id: `companies/${companyName}`, use_filename: true }).then(result => {
         const company = {
-            companyName, companyLogo: result.secure_url, companyPrice, companyExchangeScore, companyEmail
+            companyName, companyLogo: result.secure_url, companyPrice, companyExchangeScore, companyEmail, companySector, companyDescription
         }
         const newCompany = new companySchema(company)
         newCompany.save()

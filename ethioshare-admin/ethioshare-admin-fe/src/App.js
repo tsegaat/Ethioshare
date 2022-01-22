@@ -8,7 +8,7 @@ export default function Create() {
     e.preventDefault();
 
     const formElements = []
-    for (let i = 0; i < 5; i++) {
+    for (let i = 0; i < 7; i++) {
       formElements.push(formRef.current.children[i])
     }
     const companyName = formElements[0].children[0].children[1].value
@@ -16,8 +16,10 @@ export default function Create() {
     const companyPrice = formElements[2].children[1].children[0].value
     const companyExchangeScore = formElements[3].children[1].children[0].value
     const companyLogo = formElements[4].children[1].children[0].value
+    const companySector = formElements[5].children[1].children[0].value
+    const companyDescription = formElements[6].children[1].children[0].value
 
-    const company = { companyName, companyEmail, companyPrice, companyExchangeScore, companyLogo }
+    const company = { companyName, companyEmail, companyPrice, companyExchangeScore, companyLogo, companySector, companyDescription }
 
     axios.post("http://localhost:8000/add", company).then(res => {
       alert(res.data)
@@ -117,6 +119,38 @@ export default function Create() {
                   required
                   className="focus:ring-indigo-500 focus:border-indigo-500 w-full py-4 block border-gray-300 rounded-md"
                   placeholder="Company Logo Link"
+                />
+              </div>
+            </div>
+
+            <div className="shadow-sm -space-y-px">
+              <label htmlFor="company-sector" className="sr-only">
+                Company Sector
+              </label>
+              <div className="relative">
+                <input
+                  type="text"
+                  name="companySector"
+                  id="companySector"
+                  required
+                  className="focus:ring-indigo-500 focus:border-indigo-500 w-full py-4 block border-gray-300 rounded-md"
+                  placeholder="Company Sector"
+                />
+              </div>
+            </div>
+
+            <div className="shadow-sm -space-y-px">
+              <label htmlFor="company-description" className="sr-only">
+                Company Description
+              </label>
+              <div className="relative">
+                <input
+                  type="text"
+                  name="companyDescription"
+                  id="companyDescription"
+                  required
+                  className="focus:ring-indigo-500 focus:border-indigo-500 w-full py-4 block border-gray-300 rounded-md"
+                  placeholder="Company Description"
                 />
               </div>
             </div>

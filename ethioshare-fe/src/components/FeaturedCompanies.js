@@ -1,58 +1,35 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "@reach/router";
-
-const companies = [
-    {
-        name: 'Zemen Bank',
-        title: '493.2 ETB',
-        department: 'Optimization',
-        role: '80%',
-        email: 'zemen@bank.com',
-        image:
-            'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=4&w=256&h=256&q=60',
-    },
-    {
-        name: 'Coca Cola',
-        title: '312.2 ETB',
-        department: 'Optimization',
-        role: '36%',
-        email: 'cocacola@cola.com',
-        image:
-            'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=4&w=256&h=256&q=60',
-    },
-    {
-        name: 'Awash Bank',
-        title: '43.2 ETB',
-        department: 'Optimization',
-        role: '63%',
-        email: 'jane.cooper@example.com',
-        image:
-            'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=4&w=256&h=256&q=60',
-    },
-    {
-        name: 'Dashen Bank',
-        title: '262.6 ETB',
-        department: 'Optimization',
-        role: '70%',
-        email: 'dashen@bankk.com',
-        image:
-            'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=4&w=256&h=256&q=60',
-    },
-    {
-        name: 'ATK',
-        title: '472.8 ETB',
-        department: 'Optimization',
-        role: '55%',
-        email: 'atk-bi@atk.com',
-        image:
-            'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=4&w=256&h=256&q=60',
-    },
-    // More people...
-]
+import axios from "axios"
 
 export default function FeaturedCompanies() {
+
+    const [companies, setCompanies] = useState([])
+
+    const fetchData = () => {
+        axios.get("http://localhost:8000/companies/wd").then(res => {
+            const displayableCompanies = []
+            res.data.forEach(company => {
+                displayableCompanies.push({
+                    companyName: company.companyName.charAt(0).toUpperCase() + company.companyName.slice(1),
+                    companyEmail: company.companyEmail,
+                    companySector: company.companySector.charAt(0).toUpperCase() + company.companySector.slice(1),
+                    // Can edit logo abit here
+                    companyLogo: company.companyLogo,
+                    companyPrice: company.companyPrice.toString() + " " + "ETB",
+                    companyExchangeScore: company.companyExchangeScore.toString() + "%",
+                })
+            })
+            setCompanies(displayableCompanies)
+        })
+    }
+
+    useEffect(() => { fetchData() }, [])
+
     return (
+
         <div className="flex flex-col mt-12 mx-12">
+            {console.log(companies)}
             <div className="mb-4 text-xl">Featured Companies</div>
             <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
                 <div className="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
@@ -70,11 +47,17 @@ export default function FeaturedCompanies() {
                                         scope="col"
                                         className="px-6 py-3 text-left text-sm font-medium text-gray-500 uppercase tracking-wider"
                                     >
-                                        Price
+                                        Sector
                                     </th>
                                     <th
                                         scope="col"
                                         className="px-6 py-3 text-left text-sm font-medium text-gray-500 uppercase tracking-wider"
+                                    >
+                                        Price
+                                    </th>
+                                    <th
+                                        scope="col"
+                                        className="px-6 py-3 text-center text-sm font-medium text-gray-500 uppercase tracking-wider"
                                     >
                                         Exchange Score
                                     </th>
@@ -84,23 +67,26 @@ export default function FeaturedCompanies() {
                                 </tr>
                             </thead>
                             <tbody className="bg-white divide-y divide-gray-200">
-                                {companies.map((company) => (
-                                    <tr key={company.email}>
+                                {companies && companies.map((company, index) => (
+                                    <tr key={index}>
                                         <td className="px-6 py-4 whitespace-nowrap">
                                             <div className="flex items-center">
                                                 <div className="flex-shrink-0 h-10 w-10">
-                                                    <img className="h-11 w-12" src={company.image} alt="" />
+                                                    <img className="h-11 w-11" src={company.companyLogo} alt="" />
                                                 </div>
                                                 <div className="ml-4">
-                                                    <div className="text-md font-medium text-gray-900">{company.name}</div>
-                                                    <div className="text-sm text-gray-500">{company.email}</div>
+                                                    <div className="text-md font-medium text-gray-900">{company.companyName}</div>
+                                                    <div className="text-sm text-gray-500">{company.companyEmail}</div>
                                                 </div>
                                             </div>
                                         </td>
                                         <td className="px-6 py-4 whitespace-nowrap">
-                                            <div className="text-md text-gray-900">{company.title}</div>
+                                            <div className="text-md text-gray-900">{company.companySector}</div>
                                         </td>
-                                        <td className="px-6 py-4 whitespace-nowrap text-md text-gray-500">{company.role}</td>
+                                        <td className="px-6 py-4 whitespace-nowrap">
+                                            <div className="text-md text-gray-900">{company.companyPrice}</div>
+                                        </td>
+                                        <td className="px-6 py-4 text-center">{company.companyExchangeScore}</td>
                                         <td className="px-6 py-4 whitespace-nowrap text-md text-center font-medium">
                                             <Link to="create" className="text-blue-600 hover:text-blue-700 hover:underline">
                                                 Exchange
