@@ -1,6 +1,7 @@
 import React from "react";
 import Navbar from "../components/Navbar";
 import { Link } from "@reach/router";
+import { navigate } from "gatsby";
 import axios from "axios"
 
 export default function Create() {
@@ -30,8 +31,7 @@ export default function Create() {
 
         axios.post("http://localhost:8000/users/add", user).then(res => {
             if (res.data.userCreated) {
-                // Go to the next page
-                alert("User created")
+                navigate('/main', { state: { showPage: true } })
             } else {
                 const cause = res.data.errorCause
                 if (cause === "email") {

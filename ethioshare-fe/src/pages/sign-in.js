@@ -1,9 +1,10 @@
 import React from "react";
 import Navbar from "../components/Navbar";
-import { Link } from "@reach/router";
 import axios from "axios"
+import Link from 'gatsby-link'
+import { navigate } from 'gatsby'
 
-export default function SignIn() {
+export default function SignIn(props) {
     const passwordRef = React.createRef()
     const emailRef = React.createRef()
     const passwordShowIconRef = React.createRef()
@@ -22,9 +23,8 @@ export default function SignIn() {
                 warnings.current.value = "User does not exist"
             } else {
                 if (res.data.correct) {
-                    // The password is correct sign in
+                    navigate('/main', { state: { showPage: true } })
                     warnings.current.style = "display: none"
-                    alert("Sign In")
                 } else {
                     warnings.current.style = "display: block"
                     warnings.current.innerHTML = "Password is incorrect"

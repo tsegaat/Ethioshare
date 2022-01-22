@@ -29,7 +29,6 @@ export default function FeaturedCompanies() {
     return (
 
         <div className="flex flex-col mt-12 mx-12">
-            {console.log(companies)}
             <div className="mb-4 text-xl">Featured Companies</div>
             <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
                 <div className="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
