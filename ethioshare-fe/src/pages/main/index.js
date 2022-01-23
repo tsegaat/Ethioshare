@@ -22,6 +22,7 @@ import {
     ChevronRightIcon,
     OfficeBuildingIcon,
     SearchIcon,
+    MailIcon
 } from '@heroicons/react/solid'
 import { Redirect } from "@reach/router"
 import { TrendingCompanies, SearchCompanies } from '../../components/main/companies'
@@ -147,9 +148,9 @@ export default function Example({ location }) {
                 </Transition.Root>
 
                 {/* Static sidebar for desktop */}
-                <div className="hidden lg:flex lg:w-72 lg:flex-col lg:fixed lg:inset-y-0">
+                <div className="hidden lg:flex lg:w-72 bg-gray-100 lg:flex-col lg:fixed lg:inset-y-0">
                     {/* Sidebar component, swap this element with another sidebar if you like */}
-                    <div className="flex flex-col flex-grow bg-gray-100 pt-5 pb-4 overflow-y-auto">
+                    <div className="flex flex-col flex-grow pt-5 pb-4 overflow-y-auto">
                         <div className="flex items-center flex-shrink-0 px-4 mb-10">
                             <img
                                 className="h-8 w-auto"
@@ -157,43 +158,111 @@ export default function Example({ location }) {
                                 alt="Easywire logo"
                             />
                         </div>
-                        <nav className="mt-5 flex-1 flex flex-col divide-y overflow-y-auto" aria-label="Sidebar">
-                            <div className="px-2 space-y-1">
-                                <div>
-                                    <label htmlFor="companyName" className="block text-sm font-medium">
-                                        Comapny Name
+                        <nav className="mt-5" aria-label="Sidebar">
+                            <div>
+                                <div className="px-5 space-y-1 mb-8">
+                                    <label
+                                        htmlFor="name"
+                                        className="-mt-px inline-block px-1 bg-grey-100 text-base font-bold text-gray-900"
+                                    >
+                                        Company Name
                                     </label>
-                                    <div className="mt-1">
+                                    <div className="relative bg-white border border-gray-300 rounded-md px-2 py-1 shadow-sm focus-within:ring-1 focus-within:ring-indigo-600 focus-within:border-indigo-600">
+
                                         <input
                                             type="text"
-                                            name="companyName"
-                                            id="companyName"
-                                            className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block sm:text-sm border-gray-300 rounded-md"
+                                            name="name"
+                                            id="name"
+                                            autoComplete="off"
+                                            className="block w-full border-0 text-gray-900 focus:ring-0 lg:text-base text-sm"
                                             placeholder="Zemen Bank"
                                         />
                                     </div>
                                 </div>
-                            </div>
-                            <div className="mt-6 pt-6">
-                                <div className="px-2 space-y-1">
-                                    {secondaryNavigation.map((item) => (
-                                        <a
-                                            key={item.name}
-                                            href={item.href}
-                                            className="group flex items-center px-2 py-2 text-sm leading-6 font-medium rounded-md hover:text-white hover:bg-cyan-600"
+                                <div className="px-5 space-y-1 mb-8">
+                                    <label
+                                        htmlFor="name"
+                                        className="-mt-px inline-block px-1 bg-grey-100 text-base font-bold text-gray-900"
+                                    >
+                                        Sector
+                                    </label>
+                                    <div className="relative bg-white border border-gray-300 rounded-md px-2 py-1 shadow-sm focus-within:ring-1 focus-within:ring-indigo-600 focus-within:border-indigo-600">
+
+                                        <input
+                                            type="text"
+                                            name="name"
+                                            id="sector"
+                                            autoComplete="off"
+                                            list='sectors'
+                                            className="block w-full border-0 text-gray-900 focus:ring-0 lg:text-base text-sm"
+                                            placeholder="Agriculture"
+                                        />
+                                        <datalist id="sectors">
+                                            <option>Banks</option>
+                                        </datalist>
+                                    </div>
+                                </div>
+                                <div className="px-5 space-y-1 mb-8">
+                                    <label
+                                        htmlFor="name"
+                                        className="-mt-px inline-block px-1 bg-grey-100 text-base font-bold text-gray-900"
+                                    >
+                                        I want to spend
+                                    </label>
+                                    <div className="relative bg-white border border-gray-300 rounded-md px-2 py-1 shadow-sm focus-within:ring-1 focus-within:ring-indigo-600 focus-within:border-indigo-600">
+                                        <input
+                                            type="number"
+                                            name="name"
+                                            id="name"
+                                            step="any"
+                                            min={1}
+                                            autoComplete="off"
+                                            className="block w-full border-0 text-gray-900 focus:ring-0 lg:text-base text-sm"
+                                            placeholder="Any Amount"
+                                        />
+                                        <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
+                                            <span className="text-gray-500 lg:text-base text-sm" id="price-currency">
+                                                ETB
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div className="px-5 space-y-1 mb-8">
+                                    <div className='relative'>
+                                        <button
+                                            type="button"
+                                            className="inline-flex items-center w-full px-4 py-2 border border-transparent shadow-sm text-base font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                                         >
-                                            <item.icon className="mr-4 h-6 w-6" aria-hidden="true" />
-                                            {item.name}
-                                        </a>
-                                    ))}
+                                            Find Companies
+
+                                        </button>
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="absolute top-[8px] left-[210px] h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                                        </svg>
+                                    </div>
                                 </div>
                             </div>
                         </nav>
                     </div>
+                    <div className="my-6 pt-6">
+                        <div className="px-2 space-y-1">
+                            {secondaryNavigation.map((item) => (
+                                <a
+                                    key={item.name}
+                                    href={item.href}
+                                    className="group flex items-center px-2 py-2 text-sm leading-6 font-medium rounded-md hover:text-white hover:bg-cyan-600"
+                                >
+                                    <item.icon className="mr-4 h-6 w-6" aria-hidden="true" />
+                                    {item.name}
+                                </a>
+                            ))}
+                        </div>
+                    </div>
                 </div>
 
                 <div className="lg:pl-64 flex flex-col flex-1">
-                    <div className="relative z-10 flex-shrink-0 flex h-16 bg-white border-b border-gray-200 lg:border-none">
+                    <div className="relative z-10 flex-shrink-0 flex h-16 border-gray-200 lg:border-none">
                         <button
                             type="button"
                             className="px-4 border-r border-gray-200 text-gray-400 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-cyan-500 lg:hidden"
@@ -290,7 +359,7 @@ export default function Example({ location }) {
                         </div>
 
                         <div>
-                            <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pb-3">
+                            <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:mx-12 pb-3">
                                 <h6 className="text-5xl leading-[1.5em] font-bold text-gray-900">Exchange Company Shares</h6>
                                 <h2 className="text-lg font-medium text-gray-600">Make buy requests and secure your shares!</h2>
                             </div>
