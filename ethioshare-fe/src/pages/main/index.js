@@ -1,28 +1,14 @@
 import React from 'react'
 import { Fragment, useState } from 'react'
-import { Dialog, Menu, Transition } from '@headlessui/react'
+import { Menu, Transition } from '@headlessui/react'
 import {
     BellIcon,
-    ClockIcon,
     CogIcon,
-    CreditCardIcon,
-    DocumentReportIcon,
-    HomeIcon,
-    MenuAlt1Icon,
     QuestionMarkCircleIcon,
-    ScaleIcon,
     ShieldCheckIcon,
-    UserGroupIcon,
-    XIcon,
 } from '@heroicons/react/outline'
 import {
-    CashIcon,
-    CheckCircleIcon,
     ChevronDownIcon,
-    ChevronRightIcon,
-    OfficeBuildingIcon,
-    SearchIcon,
-    MailIcon
 } from '@heroicons/react/solid'
 import { Redirect } from "@reach/router"
 import { TrendingCompanies, SearchCompanies } from '../../components/main/companies'
@@ -39,7 +25,6 @@ function classNames(...classes) {
 
 export default function Example({ location }) {
 
-    const [sidebarOpen, setSidebarOpen] = useState(false)
     const { showPage } = location.state || false
 
     return !showPage ? (
@@ -48,100 +33,8 @@ export default function Example({ location }) {
 
         <>
             <div className="min-h-full">
-                <Transition.Root show={sidebarOpen} as={Fragment}>
-                    <Dialog as="div" className="fixed inset-0 flex z-40 lg:hidden" onClose={setSidebarOpen}>
-                        <Transition.Child
-                            as={Fragment}
-                            enter="transition-opacity ease-linear duration-300"
-                            enterFrom="opacity-0"
-                            enterTo="opacity-100"
-                            leave="transition-opacity ease-linear duration-300"
-                            leaveFrom="opacity-100"
-                            leaveTo="opacity-0"
-                        >
-                            <Dialog.Overlay className="fixed inset-0 bg-gray-600 bg-opacity-75" />
-                        </Transition.Child>
-                        <Transition.Child
-                            as={Fragment}
-                            enter="transition ease-in-out duration-300 transform"
-                            enterFrom="-translate-x-full"
-                            enterTo="translate-x-0"
-                            leave="transition ease-in-out duration-300 transform"
-                            leaveFrom="translate-x-0"
-                            leaveTo="-translate-x-full"
-                        >
-                            <div className="relative flex-1 flex flex-col max-w-xs w-full pt-5 pb-4 bg-gray-100">
-                                <Transition.Child
-                                    as={Fragment}
-                                    enter="ease-in-out duration-300"
-                                    enterFrom="opacity-0"
-                                    enterTo="opacity-100"
-                                    leave="ease-in-out duration-300"
-                                    leaveFrom="opacity-100"
-                                    leaveTo="opacity-0"
-                                >
-                                    <div className="absolute top-0 right-0 -mr-12 pt-2">
-                                        <button
-                                            type="button"
-                                            className="ml-1 flex items-center justify-center h-10 w-10 rounded-full focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white"
-                                            onClick={() => setSidebarOpen(false)}
-                                        >
-                                            <span className="sr-only">Close sidebar</span>
-                                            <XIcon className="h-6 w-6 text-white" aria-hidden="true" />
-                                        </button>
-                                    </div>
-                                </Transition.Child>
-                                <div className="flex-shrink-0 flex items-center px-4">
-                                    <img
-                                        className="h-8 w-auto"
-                                        src="https://tailwindui.com/img/logos/easywire-logo-cyan-300-mark-white-text.svg"
-                                        alt="Easywire logo"
-                                    />
-                                </div>
-                                <nav
-                                    className="mt-5 flex-shrink-0 h-full divide-y divide-cyan-800 overflow-y-auto"
-                                    aria-label="Sidebar"
-                                >
-                                    <div className="px-2 space-y-1">
-                                        <div>
-                                            <label htmlFor="email" className="sr-only">
-                                                Email
-                                            </label>
-                                            <input
-                                                type="email"
-                                                name="email"
-                                                id="email"
-                                                className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
-                                                placeholder="you@example.com"
-                                            />
-                                        </div>
-                                    </div>
-                                    <div className="mt-6 pt-6">
-                                        <div className="px-2 space-y-1">
-                                            {secondaryNavigation.map((item) => (
-                                                <a
-                                                    key={item.name}
-                                                    href={item.href}
-                                                    className="group flex items-center px-2 py-2 text-base font-medium rounded-md text-blue-100 hover:text-white hover:bg-blue-600"
-                                                >
-                                                    <item.icon className="mr-4 h-6 w-6 text-blue-200" aria-hidden="true" />
-                                                    {item.name}
-                                                </a>
-                                            ))}
-                                        </div>
-                                    </div>
-                                </nav>
-                            </div>
-                        </Transition.Child>
-                        <div className="flex-shrink-0 w-14" aria-hidden="true">
-                            {/* Dummy element to force sidebar to shrink to fit close icon */}
-                        </div>
-                    </Dialog>
-                </Transition.Root>
-
                 {/* Static sidebar for desktop */}
                 <div className="hidden lg:flex lg:w-72 bg-gray-100 lg:flex-col lg:fixed lg:inset-y-0">
-                    {/* Sidebar component, swap this element with another sidebar if you like */}
                     <div className="flex flex-col flex-grow pt-5 pb-4 overflow-y-auto">
                         <div className="flex items-center flex-shrink-0 px-4 mb-10">
                             <img
@@ -257,14 +150,14 @@ export default function Example({ location }) {
 
                 <div className="lg:pl-64 flex flex-col flex-1">
                     <div className="relative z-10 flex-shrink-0 flex h-16 border-gray-200 lg:border-none">
-                        <button
-                            type="button"
-                            className="px-4 border-r border-gray-200 text-gray-400 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-cyan-500 lg:hidden"
-                            onClick={() => setSidebarOpen(true)}
-                        >
-                            <span className="sr-only">Open sidebar</span>
-                            <MenuAlt1Icon className="h-6 w-6" aria-hidden="true" />
-                        </button>
+                        <div className='absolute inset-y-0 left-0 flex pl-4 items-center'>
+                            <img
+                                className="h-8 w-auto lg:hidden"
+                                src="https://tailwindui.com/img/logos/workflow-mark-indigo-600.svg"
+                                alt="Easywire logo"
+                            />
+                        </div>
+                        {/* TODO: When in Ipad show with the text */}
                         <div className="flex-1 px-4 flex justify-between sm:px-6 lg:max-w-6xl lg:mx-auto lg:px-8">
                             <div className="flex-1 flex">
                             </div>
@@ -357,7 +250,100 @@ export default function Example({ location }) {
                                 <h6 className="text-5xl leading-[1.5em] font-bold text-gray-900">Exchange Company Shares</h6>
                                 <h2 className="text-lg font-medium text-gray-600">Make buy requests and secure your shares!</h2>
                             </div>
+                            {/* Mobile Version of the filter */}
+                            <div className="lg:hidden lg:flex lg:w-72 lg:flex-col lg:inset-y-0">
+                                <div className="flex flex-col flex-grow overflow-y-auto">
 
+                                    <nav className="mt-10" aria-label="Sidebar">
+                                        <div>
+                                            <div className="px-5 space-y-1 mb-8">
+                                                <label
+                                                    htmlFor="name"
+                                                    className="-mt-px inline-block px-1 bg-grey-100 text-base font-bold text-gray-900"
+                                                >
+                                                    Company Name
+                                                </label>
+                                                <div className="relative bg-white border border-gray-300 rounded-md px-2 py-1 shadow-sm focus-within:ring-1 focus-within:ring-blue-600 focus-within:border-blue-600">
+
+                                                    <input
+                                                        type="text"
+                                                        name="name"
+                                                        id="name"
+                                                        autoComplete="off"
+                                                        className="block w-full border-0 text-gray-900 focus:ring-0 lg:text-base text-sm"
+                                                        placeholder="Zemen Bank"
+                                                    />
+                                                </div>
+                                            </div>
+                                            <div className="px-5 space-y-1 mb-8">
+                                                <label
+                                                    htmlFor="name"
+                                                    className="-mt-px inline-block px-1 bg-grey-100 text-base font-bold text-gray-900"
+                                                >
+                                                    Sector
+                                                </label>
+                                                <div className="relative bg-white border border-gray-300 rounded-md px-2 py-1 shadow-sm focus-within:ring-1 focus-within:ring-blue-600 focus-within:border-blue-600">
+
+                                                    <input
+                                                        type="text"
+                                                        name="name"
+                                                        id="sector"
+                                                        autoComplete="off"
+                                                        list='sectors'
+                                                        className="block w-full border-0 text-gray-900 focus:ring-0 lg:text-base text-sm"
+                                                        placeholder="Agriculture"
+                                                    />
+                                                    <datalist id="sectors">
+                                                        <option>Banks</option>
+                                                    </datalist>
+                                                </div>
+                                            </div>
+                                            <div className="px-5 space-y-1 mb-8">
+                                                <label
+                                                    htmlFor="name"
+                                                    className="-mt-px inline-block px-1 bg-grey-100 text-base font-bold text-gray-900"
+                                                >
+                                                    I want to spend
+                                                </label>
+                                                <div className="relative bg-white border border-gray-300 rounded-md px-2 py-1 shadow-sm focus-within:ring-1 focus-within:ring-blue-600 focus-within:border-blue-600">
+                                                    <input
+                                                        type="number"
+                                                        name="name"
+                                                        id="name"
+                                                        step="any"
+                                                        min={1}
+                                                        autoComplete="off"
+                                                        className="block w-full border-0 text-gray-900 focus:ring-0 lg:text-base text-sm"
+                                                        placeholder="Any Amount"
+                                                    />
+                                                    <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
+                                                        <span className="text-gray-500 lg:text-base text-sm" id="price-currency">
+                                                            ETB
+                                                        </span>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                            <div className="px-5 space-y-1 mb-8">
+                                                <div className='relative'>
+                                                    <button
+                                                        type="button"
+                                                        className="inline-flex items-center w-full px-4 py-3 border border-transparent shadow-sm text-base font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                                                    >
+                                                        Find Companies
+
+                                                    </button>
+                                                    {/* TODO: Better way to allign the icon at the end */}
+                                                    <svg xmlns="http://www.w3.org/2000/svg" class="absolute top-[13px] left-[280px] h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                                                    </svg>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </nav>
+                                </div>
+
+                            </div>
                             {/* Activity table (small breakpoint and up) */}
                             <TrendingCompanies></TrendingCompanies>
                         </div>
