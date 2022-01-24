@@ -27,14 +27,6 @@ import {
 import { Redirect } from "@reach/router"
 import { TrendingCompanies, SearchCompanies } from '../../components/main/companies'
 
-const navigation = [
-    { name: 'Home', href: '#', icon: HomeIcon, current: true },
-    { name: 'History', href: '#', icon: ClockIcon, current: false },
-    { name: 'Balances', href: '#', icon: ScaleIcon, current: false },
-    { name: 'Cards', href: '#', icon: CreditCardIcon, current: false },
-    { name: 'Recipients', href: '#', icon: UserGroupIcon, current: false },
-    { name: 'Reports', href: '#', icon: DocumentReportIcon, current: false },
-]
 const secondaryNavigation = [
     { name: 'Settings', href: '#', icon: CogIcon },
     { name: 'Help', href: '#', icon: QuestionMarkCircleIcon },
@@ -130,9 +122,9 @@ export default function Example({ location }) {
                                                 <a
                                                     key={item.name}
                                                     href={item.href}
-                                                    className="group flex items-center px-2 py-2 text-base font-medium rounded-md text-cyan-100 hover:text-white hover:bg-cyan-600"
+                                                    className="group flex items-center px-2 py-2 text-base font-medium rounded-md text-blue-100 hover:text-white hover:bg-blue-600"
                                                 >
-                                                    <item.icon className="mr-4 h-6 w-6 text-cyan-200" aria-hidden="true" />
+                                                    <item.icon className="mr-4 h-6 w-6 text-blue-200" aria-hidden="true" />
                                                     {item.name}
                                                 </a>
                                             ))}
@@ -158,7 +150,7 @@ export default function Example({ location }) {
                                 alt="Easywire logo"
                             />
                         </div>
-                        <nav className="mt-5" aria-label="Sidebar">
+                        <nav className="mt-10" aria-label="Sidebar">
                             <div>
                                 <div className="px-5 space-y-1 mb-8">
                                     <label
@@ -167,7 +159,7 @@ export default function Example({ location }) {
                                     >
                                         Company Name
                                     </label>
-                                    <div className="relative bg-white border border-gray-300 rounded-md px-2 py-1 shadow-sm focus-within:ring-1 focus-within:ring-indigo-600 focus-within:border-indigo-600">
+                                    <div className="relative bg-white border border-gray-300 rounded-md px-2 py-1 shadow-sm focus-within:ring-1 focus-within:ring-blue-600 focus-within:border-blue-600">
 
                                         <input
                                             type="text"
@@ -186,7 +178,7 @@ export default function Example({ location }) {
                                     >
                                         Sector
                                     </label>
-                                    <div className="relative bg-white border border-gray-300 rounded-md px-2 py-1 shadow-sm focus-within:ring-1 focus-within:ring-indigo-600 focus-within:border-indigo-600">
+                                    <div className="relative bg-white border border-gray-300 rounded-md px-2 py-1 shadow-sm focus-within:ring-1 focus-within:ring-blue-600 focus-within:border-blue-600">
 
                                         <input
                                             type="text"
@@ -209,7 +201,7 @@ export default function Example({ location }) {
                                     >
                                         I want to spend
                                     </label>
-                                    <div className="relative bg-white border border-gray-300 rounded-md px-2 py-1 shadow-sm focus-within:ring-1 focus-within:ring-indigo-600 focus-within:border-indigo-600">
+                                    <div className="relative bg-white border border-gray-300 rounded-md px-2 py-1 shadow-sm focus-within:ring-1 focus-within:ring-blue-600 focus-within:border-blue-600">
                                         <input
                                             type="number"
                                             name="name"
@@ -232,26 +224,28 @@ export default function Example({ location }) {
                                     <div className='relative'>
                                         <button
                                             type="button"
-                                            className="inline-flex items-center w-full px-4 py-2 border border-transparent shadow-sm text-base font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                                            className="inline-flex items-center w-full px-4 py-3 border border-transparent shadow-sm text-base font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                                         >
                                             Find Companies
 
                                         </button>
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="absolute top-[8px] left-[210px] h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="absolute top-[13px] left-[210px] h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                                         </svg>
                                     </div>
                                 </div>
                             </div>
                         </nav>
                     </div>
-                    <div className="my-6 pt-6">
+                    <hr className='bg-gray-100'></hr>
+                    <div className="mb-6 pt-6">
                         <div className="px-2 space-y-1">
                             {secondaryNavigation.map((item) => (
                                 <a
                                     key={item.name}
                                     href={item.href}
-                                    className="group flex items-center px-2 py-2 text-sm leading-6 font-medium rounded-md hover:text-white hover:bg-cyan-600"
+                                    className="group flex items-center px-2 py-2 text-sm leading-6 font-medium rounded-md hover:text-white hover:bg-blue-600"
                                 >
                                     <item.icon className="mr-4 h-6 w-6" aria-hidden="true" />
                                     {item.name}
@@ -277,7 +271,7 @@ export default function Example({ location }) {
                             <div className="ml-4 flex items-center md:ml-6">
                                 <button
                                     type="button"
-                                    className="bg-white p-1 rounded-full text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500"
+                                    className="bg-white p-1 rounded-full text-gray-400 hover:text-blue-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
                                 >
                                     <span className="sr-only">View notifications</span>
                                     <BellIcon className="h-6 w-6" aria-hidden="true" />
@@ -286,7 +280,7 @@ export default function Example({ location }) {
                                 {/* Profile dropdown */}
                                 <Menu as="div" className="ml-3 relative">
                                     <div>
-                                        <Menu.Button className="max-w-xs bg-white rounded-full flex items-center text-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500 lg:p-2 lg:rounded-md lg:hover:bg-gray-50">
+                                        <Menu.Button className="max-w-xs bg-white rounded-full flex items-center text-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 lg:p-2 lg:rounded-md lg:hover:bg-gray-50">
                                             <img
                                                 className="h-8 w-8 rounded-full"
                                                 src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
@@ -365,7 +359,7 @@ export default function Example({ location }) {
                             </div>
 
                             {/* Activity table (small breakpoint and up) */}
-                            <SearchCompanies></SearchCompanies>
+                            <TrendingCompanies></TrendingCompanies>
                         </div>
                     </main>
                 </div>
@@ -374,6 +368,3 @@ export default function Example({ location }) {
 
     )
 }
-
-
-// #f8f8f8
