@@ -4,33 +4,36 @@ import axios from "axios"
 import { CurrencyDollarIcon } from '@heroicons/react/solid'
 
 
-export function TrendingCompanies() {
+export function TrendingCompanies({ active }) {
 
     const [companies, setCompanies] = useState([])
 
     const fetchData = () => {
-        axios.get("http://localhost:8000/companies/wd").then(res => {
-            const displayableCompanies = []
-            res.data.forEach(company => {
-                displayableCompanies.push({
-                    companyName: company.companyName.charAt(0).toUpperCase() + company.companyName.slice(1),
-                    companyEmail: company.companyEmail,
-                    companySector: company.companySector.charAt(0).toUpperCase() + company.companySector.slice(1),
-                    // Can edit logo abit here
-                    companyLogo: company.companyLogo,
-                    companyPrice: company.companyPrice.toString() + " " + "ETB",
-                    companyExchangeScore: company.companyExchangeScore.toString() + "%",
+        if (active) {
+            axios.get("http://localhost:8000/companies/wd").then(res => {
+                const displayableCompanies = []
+                res.data.forEach(company => {
+                    displayableCompanies.push({
+                        companyName: company.companyName.charAt(0).toUpperCase() + company.companyName.slice(1),
+                        companyEmail: company.companyEmail,
+                        companySector: company.companySector.charAt(0).toUpperCase() + company.companySector.slice(1),
+                        // Can edit logo abit here
+                        companyLogo: company.companyLogo,
+                        companyPrice: company.companyPrice.toString() + " " + "ETB",
+                        companyExchangeScore: company.companyExchangeScore.toString() + "%",
+                    })
                 })
+                setCompanies(displayableCompanies)
             })
-            setCompanies(displayableCompanies)
-        })
+        }
+
     }
 
     useEffect(() => { fetchData() }, [])
-
-    return (
-
-        <div className="flex flex-col mt-12 mx-12">
+    return !active ? (
+        <nothing></nothing>
+    ) : (
+        <div className="flex flex-col mt-12 lg:mx-12 mx-5">
             <div className="mb-4 text-xl">Trending Companies</div>
             <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
                 <div className="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
@@ -108,32 +111,34 @@ export function TrendingCompanies() {
     )
 }
 
-export function SearchCompanies() {
 
+export function SearchCompanies({ active }) {
     const [companies, setCompanies] = useState([])
-
     const fetchData = () => {
-        axios.get("http://localhost:8000/companies/wd").then(res => {
-            const displayableCompanies = []
-            res.data.forEach(company => {
-                displayableCompanies.push({
-                    companyName: company.companyName.charAt(0).toUpperCase() + company.companyName.slice(1),
-                    companyEmail: company.companyEmail,
-                    companySector: company.companySector.charAt(0).toUpperCase() + company.companySector.slice(1),
-                    // Can edit logo abit here
-                    companyLogo: company.companyLogo,
-                    companyPrice: company.companyPrice.toString() + " " + "ETB",
-                    companyExchangeScore: company.companyExchangeScore.toString() + "%",
+        if (active) {
+            axios.get("http://localhost:8000/companies/wd").then(res => {
+                const displayableCompanies = []
+                res.data.forEach(company => {
+                    displayableCompanies.push({
+                        companyName: company.companyName.charAt(0).toUpperCase() + company.companyName.slice(1),
+                        companyEmail: company.companyEmail,
+                        companySector: company.companySector.charAt(0).toUpperCase() + company.companySector.slice(1),
+                        // Can edit logo abit here
+                        companyLogo: company.companyLogo,
+                        companyPrice: company.companyPrice.toString() + " " + "ETB",
+                        companyExchangeScore: company.companyExchangeScore.toString() + "%",
+                    })
                 })
+                setCompanies(displayableCompanies)
             })
-            setCompanies(displayableCompanies)
-        })
+        }
     }
 
     useEffect(() => { fetchData() }, [])
-
-    return (
-        <div className="flex flex-col mt-12 mx-12">
+    return !active ? (
+        <nothing></nothing>
+    ) : (
+        <div className="flex flex-col mt-12 lg:mx-12 mx-5">
             <div className="mb-4 text-xl">Companies</div>
             <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
                 <div className="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">

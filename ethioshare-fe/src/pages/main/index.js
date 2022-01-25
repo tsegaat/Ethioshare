@@ -1,5 +1,5 @@
 import React from 'react'
-import { Fragment, useState } from 'react'
+import { Fragment, useState, useRef } from 'react'
 import { Menu, Transition } from '@headlessui/react'
 import {
     BellIcon,
@@ -24,9 +24,16 @@ function classNames(...classes) {
 }
 
 export default function Example({ location }) {
-
     const { showPage } = location.state || false
+    const mainContainer = useRef()
+    const trendingRef = useRef()
+    const searchRef = useRef()
 
+    const search = (e) => {
+        e.preventDefault()
+        trendingRef.current.active = false
+        searchRef.current.active = true
+    }
     return !showPage ? (
         <Redirect noThrow to="../sign-in" />
     ) : (
@@ -44,7 +51,7 @@ export default function Example({ location }) {
                             />
                         </div>
                         <nav className="mt-10" aria-label="Sidebar">
-                            <div>
+                            <form onSubmit={search}>
                                 <div className="px-5 space-y-1 mb-8">
                                     <label
                                         htmlFor="name"
@@ -116,7 +123,7 @@ export default function Example({ location }) {
                                 <div className="px-5 space-y-1 mb-8">
                                     <div className='relative'>
                                         <button
-                                            type="button"
+                                            type="submit"
                                             className="inline-flex items-center w-full px-4 py-3 border border-transparent shadow-sm text-base font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                                         >
                                             Find Companies
@@ -128,7 +135,7 @@ export default function Example({ location }) {
                                         </svg>
                                     </div>
                                 </div>
-                            </div>
+                            </form>
                         </nav>
                     </div>
                     <hr className='bg-gray-100'></hr>
@@ -157,7 +164,7 @@ export default function Example({ location }) {
                                 alt="Easywire logo"
                             />
                         </div>
-                        {/* TODO: When in Ipad show with the text */}
+                        {/* FIXME: When in Ipad show Logo with the text */}
                         <div className="flex-1 px-4 flex justify-between sm:px-6 lg:max-w-6xl lg:mx-auto lg:px-8">
                             <div className="flex-1 flex">
                             </div>
@@ -245,7 +252,7 @@ export default function Example({ location }) {
                             </div>
                         </div>
 
-                        <div>
+                        <div ref={mainContainer}>
                             <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:mx-12 pb-3">
                                 <h6 className="text-5xl leading-[1.5em] font-bold text-gray-900">Exchange Company Shares</h6>
                                 <h2 className="text-lg font-medium text-gray-600">Make buy requests and secure your shares!</h2>
@@ -345,7 +352,8 @@ export default function Example({ location }) {
 
                             </div>
                             {/* Activity table (small breakpoint and up) */}
-                            <TrendingCompanies></TrendingCompanies>
+                            <TrendingCompanies active={false} ref={trendingRef}></TrendingCompanies>
+                            <SearchCompanies active={true} ref={searchRef}></SearchCompanies>
                         </div>
                     </main>
                 </div>
