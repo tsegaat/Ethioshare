@@ -11,7 +11,7 @@ import {
     ChevronDownIcon,
 } from '@heroicons/react/solid'
 import { Redirect } from "@reach/router"
-import { TrendingCompanies, SearchCompanies } from '../../components/main/companies'
+import { Companies } from '../../components/main/companies'
 
 const secondaryNavigation = [
     { name: 'Settings', href: '#', icon: CogIcon },
@@ -25,14 +25,29 @@ function classNames(...classes) {
 
 export default function Example({ location }) {
     const { showPage } = location.state || false
-    const mainContainer = useRef()
-    const trendingRef = useRef()
-    const searchRef = useRef()
+
+    const [companies, setCompany] = useState([{ trending: true }])
+    const formRef = useRef()
 
     const search = (e) => {
         e.preventDefault()
-        trendingRef.current.active = false
-        searchRef.current.active = true
+        const formElements = []
+        for (let i = 0; i < 3; i++) {
+            formElements.push(formRef.current.children[i])
+        }
+
+        const companyName = formElements[0].children[1].children[0].value
+        const companySector = formElements[1].children[1].children[0].value
+        const companyPrice = formElements[2].children[1].children[0].value
+
+        setCompany([{
+            trending: false,
+            parameters: {
+                companyName,
+                companySector,
+                companyPrice
+            }
+        }])
     }
     return !showPage ? (
         <Redirect noThrow to="../sign-in" />
@@ -51,7 +66,7 @@ export default function Example({ location }) {
                             />
                         </div>
                         <nav className="mt-10" aria-label="Sidebar">
-                            <form onSubmit={search}>
+                            <form onSubmit={search} ref={formRef}>
                                 <div className="px-5 space-y-1 mb-8">
                                     <label
                                         htmlFor="name"
@@ -90,7 +105,7 @@ export default function Example({ location }) {
                                             placeholder="Agriculture"
                                         />
                                         <datalist id="sectors">
-                                            <option>Banks</option>
+                                            <option>Bank</option>
                                         </datalist>
                                     </div>
                                 </div>
@@ -252,7 +267,7 @@ export default function Example({ location }) {
                             </div>
                         </div>
 
-                        <div ref={mainContainer}>
+                        <div>
                             <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:mx-12 pb-3">
                                 <h6 className="text-5xl leading-[1.5em] font-bold text-gray-900">Exchange Company Shares</h6>
                                 <h2 className="text-lg font-medium text-gray-600">Make buy requests and secure your shares!</h2>
@@ -262,7 +277,7 @@ export default function Example({ location }) {
                                 <div className="flex flex-col flex-grow overflow-y-auto">
 
                                     <nav className="mt-10" aria-label="Sidebar">
-                                        <div>
+                                        <form onSubmit={search} ref={formRef}>
                                             <div className="px-5 space-y-1 mb-8">
                                                 <label
                                                     htmlFor="name"
@@ -301,7 +316,8 @@ export default function Example({ location }) {
                                                         placeholder="Agriculture"
                                                     />
                                                     <datalist id="sectors">
-                                                        <option>Banks</option>
+                                                        {/* TODO Get the sectors from the DB and show here  */}
+                                                        <option>Bank</option>
                                                     </datalist>
                                                 </div>
                                             </div>
@@ -334,7 +350,7 @@ export default function Example({ location }) {
                                             <div className="px-5 space-y-1 mb-8">
                                                 <div className='relative'>
                                                     <button
-                                                        type="button"
+                                                        type="submit"
                                                         className="inline-flex items-center w-full px-4 py-3 border border-transparent shadow-sm text-base font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                                                     >
                                                         Find Companies
@@ -346,14 +362,16 @@ export default function Example({ location }) {
                                                     </svg>
                                                 </div>
                                             </div>
-                                        </div>
+                                        </form>
                                     </nav>
                                 </div>
 
                             </div>
                             {/* Activity table (small breakpoint and up) */}
-                            <TrendingCompanies active={false} ref={trendingRef}></TrendingCompanies>
-                            <SearchCompanies active={true} ref={searchRef}></SearchCompanies>
+                            {companies.map((company) => {
+                                return !company.trending ? <Companies name="Companies" {...company.parameters} ></Companies> : <Companies name="Trending Companies"></Companies>
+                            }
+                            )}
                         </div>
                     </main>
                 </div>
