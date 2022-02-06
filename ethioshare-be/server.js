@@ -14,11 +14,16 @@ app.use(express.urlencoded({
     extended: true
 }));
 
+
+
 const uri = process.env.ATLAS_URI
 mongoose.connect(uri, {
     useNewUrlParser: true,
     useUnifiedTopology: true
 })
+
+const graphiqlRouter = require("./routes/graphql")
+app.use("/graphql", graphiqlRouter)
 
 const connection = mongoose.connection
 connection.once('open', () => {

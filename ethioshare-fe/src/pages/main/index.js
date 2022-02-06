@@ -38,7 +38,7 @@ export default function Example({ location }) {
 
         const companyName = formElements[0].children[1].children[0].value
         const companySector = formElements[1].children[1].children[0].value
-        const companyPrice = formElements[2].children[1].children[0].value
+        const companyPrice = parseFloat(formElements[2].children[1].children[0].value)
 
         setCompany([{
             trending: false,
@@ -48,7 +48,31 @@ export default function Example({ location }) {
                 companyPrice
             }
         }])
+
+        // The query is where you send the user data and recive the data from the backend
+        var query = `query GetCompany($companyName: String, $companySector: String, $companyPrice: Float){
+            company(companyInput: {companyName: $companyName, companyPrice: $companyPrice, companySector: $companySector}){
+                  companyName
+              companyPrice
+              companySector
+            }
+          }`;
+
+        fetch('http://localhost:8000/graphql', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                query,
+                variables: { companyName, companyPrice, companySector }
+            })
+        })
+            .then(r => r.json())
+            .then(data => console.log('data returned:', data));
     }
+
+
     return !showPage ? (
         <Redirect noThrow to="../sign-in" />
     ) : (
