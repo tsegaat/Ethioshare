@@ -36,9 +36,9 @@ export default function Example({ location }) {
             formElements.push(formRef.current.children[i])
         }
 
-        const companyName = formElements[0].children[1].children[0].value
-        const companySector = formElements[1].children[1].children[0].value
-        const companyPrice = parseFloat(formElements[2].children[1].children[0].value)
+        const companyName = formElements[0].children[1].children[0].value.toLowerCase()
+        const companySector = formElements[1].children[1].children[0].value.toLowerCase()
+        const companyPrice = (formElements[2].children[1].children[0].value !== "") ? parseFloat(formElements[2].children[1].children[0].value) : 0
 
         setCompany([{
             trending: false,
@@ -142,7 +142,7 @@ export default function Example({ location }) {
                                     </label>
                                     <div className="relative bg-white border border-gray-300 rounded-md px-2 py-1 shadow-sm focus-within:ring-1 focus-within:ring-blue-600 focus-within:border-blue-600">
                                         <input
-                                            type="number"
+                                            type="text"
                                             name="name"
                                             id="name"
                                             step="any"
