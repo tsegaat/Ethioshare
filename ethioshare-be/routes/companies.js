@@ -3,10 +3,12 @@ let Companies = require("../models/companies.model")
 const bcrypt = require('bcrypt')
 
 router.route('/wd').get((req, res) => {
-    Companies.find({}, function (err, company) {
+    Companies.find({ trending: true }, function (err, company) {
+        console.log(company)
         const filterdCompanies = []
         company.forEach(comp => {
             filterdCompanies.push({
+                _id: comp._id,
                 companyName: comp.companyName,
                 companyEmail: comp.companyEmail,
                 companyLogo: comp.companyLogo,
@@ -15,6 +17,7 @@ router.route('/wd').get((req, res) => {
                 companySector: comp.companySector,
             })
         })
+        console.log(filterdCompanies)
         res.json(filterdCompanies)
     });
 })

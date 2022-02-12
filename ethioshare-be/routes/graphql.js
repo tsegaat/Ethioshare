@@ -1,6 +1,5 @@
 const { graphqlHTTP } = require("express-graphql")
 const { buildSchema } = require("graphql")
-const { events } = require("../models/companies.model")
 let Companies = require("../models/companies.model")
 
 const graphqlHandler = graphqlHTTP({
@@ -22,10 +21,11 @@ const graphqlHandler = graphqlHTTP({
             companyName: String
             companySector: String
             companyPrice: Float
+            companyDescription: String
         }
 
         type RootQuery {
-            company(companyInput: CompanyInput): [Company!]!
+            company(companyInput: CompanyInput): [Company]!
         }
 
         schema {
@@ -34,8 +34,6 @@ const graphqlHandler = graphqlHTTP({
     `),
     rootValue: {
         company: (args) => {
-            // The Dictonary here and the Company type must be the same
-            // TODO this is where the search happens with the parameters given by the client after the search returns the company dictonary with the values of the search
 
             const companyName = args.companyInput.companyName
             const companyPrice = args.companyInput.companyPrice
@@ -44,7 +42,7 @@ const graphqlHandler = graphqlHTTP({
             const searchParameter = {
                 companyName: companyName,
                 companySector: companySector,
-                companyPrice: { $lt: companyPrice }
+                companyPrice: { $lt: companyPrice },
             }
 
             if (companyName == "") delete searchParameter.companyName;

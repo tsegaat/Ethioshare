@@ -26,6 +26,9 @@ const companySchema = new Schema({
     },
     companyExchangeScore: {
         type: Number
+    },
+    trending: {
+        type: Boolean
     }
 }, { timestamps: true })
 

@@ -23,38 +23,38 @@ function classNames(...classes) {
     return classes.filter(Boolean).join(' ')
 }
 
-export default function Example({ location }) {
+export default function Main({ location }) {
     const { showPage } = location.state || false
 
-    const [companies, setCompany] = useState([{ trending: true }])
-    const formRef = useRef()
+    const [companiesParameters, setCompanyParameters] = useState([{ trending: true }])
+    const mobileFormRef = useRef()
+    const desktopFormRef = useRef()
 
-    const search = (e) => {
+    // FIXME: Implement a better way to search for the mobile and desktop version witout creating 2 seprate functions
+
+    const searchMobile = (e) => {
         e.preventDefault()
         const formElements = []
         for (let i = 0; i < 3; i++) {
-            formElements.push(formRef.current.children[i])
+            formElements.push(mobileFormRef.current.children[i])
         }
 
         const companyName = formElements[0].children[1].children[0].value.toLowerCase()
         const companySector = formElements[1].children[1].children[0].value.toLowerCase()
         const companyPrice = (formElements[2].children[1].children[0].value !== "") ? parseFloat(formElements[2].children[1].children[0].value) : 0
 
-        setCompany([{
-            trending: false,
-            parameters: {
-                companyName,
-                companySector,
-                companyPrice
-            }
-        }])
+        console.log(formElements)
 
         // The query is where you send the user data and recive the data from the backend
         var query = `query GetCompany($companyName: String, $companySector: String, $companyPrice: Float){
             company(companyInput: {companyName: $companyName, companyPrice: $companyPrice, companySector: $companySector}){
-                  companyName
-              companyPrice
-              companySector
+                _id
+                companyName
+                companyPrice
+                companySector
+                companyEmail
+                companyLogo
+                companyExchangeScore
             }
           }`;
 
@@ -69,7 +69,59 @@ export default function Example({ location }) {
             })
         })
             .then(r => r.json())
-            .then(data => console.log('data returned:', data));
+            .then(data => {
+                const companies = data.data.company
+                setCompanyParameters([{
+                    trending: false,
+                    companies
+                }])
+            });
+    }
+
+    const searchDesktop = (e) => {
+        e.preventDefault()
+        const formElements = []
+        for (let i = 0; i < 3; i++) {
+            formElements.push(desktopFormRef.current.children[i])
+        }
+
+        const companyName = formElements[0].children[1].children[0].value.toLowerCase()
+        const companySector = formElements[1].children[1].children[0].value.toLowerCase()
+        const companyPrice = (formElements[2].children[1].children[0].value !== "") ? parseFloat(formElements[2].children[1].children[0].value) : 0
+
+        console.log(formElements)
+
+        // The query is where you send the user data and recive the data from the backend
+        var query = `query GetCompany($companyName: String, $companySector: String, $companyPrice: Float){
+            company(companyInput: {companyName: $companyName, companyPrice: $companyPrice, companySector: $companySector}){
+                _id
+                companyName
+                companyPrice
+                companySector
+                companyEmail
+                companyLogo
+                companyExchangeScore
+            }
+          }`;
+
+        fetch('http://localhost:8000/graphql', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                query,
+                variables: { companyName, companyPrice, companySector }
+            })
+        })
+            .then(r => r.json())
+            .then(data => {
+                const companies = data.data.company
+                setCompanyParameters([{
+                    trending: false,
+                    companies
+                }])
+            });
     }
 
 
@@ -90,7 +142,7 @@ export default function Example({ location }) {
                             />
                         </div>
                         <nav className="mt-10" aria-label="Sidebar">
-                            <form onSubmit={search} ref={formRef}>
+                            <form onSubmit={searchDesktop} ref={desktopFormRef}>
                                 <div className="px-5 space-y-1 mb-8">
                                     <label
                                         htmlFor="name"
@@ -129,7 +181,7 @@ export default function Example({ location }) {
                                             placeholder="Agriculture"
                                         />
                                         <datalist id="sectors">
-                                            <option>Bank</option>
+                                            <option key={"bank"}>Bank</option>
                                         </datalist>
                                     </div>
                                 </div>
@@ -142,7 +194,7 @@ export default function Example({ location }) {
                                     </label>
                                     <div className="relative bg-white border border-gray-300 rounded-md px-2 py-1 shadow-sm focus-within:ring-1 focus-within:ring-blue-600 focus-within:border-blue-600">
                                         <input
-                                            type="text"
+                                            type="number"
                                             name="name"
                                             id="name"
                                             step="any"
@@ -169,8 +221,8 @@ export default function Example({ location }) {
 
                                         </button>
 
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="absolute top-[13px] left-[210px] h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                                        <svg xmlns="http://www.w3.org/2000/svg" className="absolute top-[13px] left-[210px] h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                                         </svg>
                                     </div>
                                 </div>
@@ -301,7 +353,7 @@ export default function Example({ location }) {
                                 <div className="flex flex-col flex-grow overflow-y-auto">
 
                                     <nav className="mt-10" aria-label="Sidebar">
-                                        <form onSubmit={search} ref={formRef}>
+                                        <form onSubmit={searchMobile} ref={mobileFormRef}>
                                             <div className="px-5 space-y-1 mb-8">
                                                 <label
                                                     htmlFor="name"
@@ -341,7 +393,7 @@ export default function Example({ location }) {
                                                     />
                                                     <datalist id="sectors">
                                                         {/* TODO Get the sectors from the DB and show here  */}
-                                                        <option>Bank</option>
+                                                        <option key={"bank"}>Bank</option>
                                                     </datalist>
                                                 </div>
                                             </div>
@@ -381,8 +433,8 @@ export default function Example({ location }) {
 
                                                     </button>
                                                     {/* TODO: Better way to allign the icon at the end */}
-                                                    <svg xmlns="http://www.w3.org/2000/svg" class="absolute top-[13px] left-[280px] h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                                                    <svg xmlns="http://www.w3.org/2000/svg" className="absolute top-[13px] left-[280px] h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                                                     </svg>
                                                 </div>
                                             </div>
@@ -392,8 +444,8 @@ export default function Example({ location }) {
 
                             </div>
                             {/* Activity table (small breakpoint and up) */}
-                            {companies.map((company) => {
-                                return !company.trending ? <Companies name="Companies" {...company.parameters} ></Companies> : <Companies name="Trending Companies"></Companies>
+                            {companiesParameters.map((companyParameters) => {
+                                return !companyParameters.trending ? <Companies name="Companies" companies={companyParameters.companies}></Companies> : <Companies name="Trending Companies"></Companies>
                             }
                             )}
                         </div>
