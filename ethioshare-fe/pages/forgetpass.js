@@ -1,6 +1,6 @@
 import React from "react";
 import Navbar from "../components/Navbar";
-import { Link } from "@reach/router";
+import Link from 'next/link'
 
 export default function ForgetPass() {
     // TODO: Make this forget password page work by sending an email to the user

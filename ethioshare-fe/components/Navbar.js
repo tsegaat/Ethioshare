@@ -1,17 +1,18 @@
 import React from 'react'
 import { Disclosure, Menu } from '@headlessui/react'
-import { Link } from 'gatsby'
+import Link from 'next/link'
+import { useRouter } from 'next/router';
 
 export default function Navbar() {
-    const page = window.location.href.split("//")[1].split("/")[1]
+    const page = useRouter().asPath
 
     const navigation = {
-        "indexCreate": <Link to="/create">Get Started</Link>,
-        "indexSign-in": <Link to="/sign-in">Sign In</Link>,
-        "createSign-in": <Link to="../sign-in">Sign In</Link>,
-        "createCreate": <Link to="/create">Get Started</Link>,
-        "sign-inCreate": <Link to="../create">Get Started</Link>,
-        "sign-inSign-in": <Link to="/sign-in">Sign In</Link>
+        "indexCreate": <Link href="/create">Get Started</Link>,
+        "indexSign-in": <Link href="/sign-in">Sign In</Link>,
+        "createSign-in": <Link href="../sign-in">Sign In</Link>,
+        "createCreate": <Link href="/create">Get Started</Link>,
+        "sign-inCreate": <Link href="../create">Get Started</Link>,
+        "sign-inSign-in": <Link href="/sign-in">Sign In</Link>
     }
 
     const links = []
@@ -27,7 +28,7 @@ export default function Navbar() {
             <div className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
                 <div className="relative flex items-center justify-between h-16">
                     <div className="absolute inset-y-0 left-0 flex items-center sm:hidden">
-                        <Link to="/">
+                        <Link href="/">
                             <img
                                 className="block lg:block h-8 w-auto"
                                 src="https://tailwindui.com/img/logos/workflow-mark-indigo-600.svg"
@@ -37,7 +38,7 @@ export default function Navbar() {
                     </div>
                     <div className="flex-1 flex items-center justify-center sm:items-stretch sm:justify-start">
                         <div className="flex-shrink-0 flex items-center">
-                            <Link to="/">
+                            <Link href="/">
                                 <img
                                     className="hidden sm:block h-8 w-auto"
                                     src="https://tailwindui.com/img/logos/workflow-logo-indigo-500-mark-white-text.svg"

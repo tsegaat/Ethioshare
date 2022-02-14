@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Fragment, useState, useRef } from 'react'
 import { Menu, Transition } from '@headlessui/react'
 import {
@@ -10,7 +10,6 @@ import {
 import {
     ChevronDownIcon,
 } from '@heroicons/react/solid'
-import { Redirect } from "@reach/router"
 import { Companies } from '../../components/main/companies'
 
 const secondaryNavigation = [
@@ -23,15 +22,16 @@ function classNames(...classes) {
     return classes.filter(Boolean).join(' ')
 }
 
-export default function Main({ location }) {
-    const { showPage } = location.state || false
+export default function Main() {
+
+    // TODO: The logout function is not properly working... Watch videos of how to fix this
+
 
     const [companiesParameters, setCompanyParameters] = useState([{ trending: true }])
     const mobileFormRef = useRef()
     const desktopFormRef = useRef()
 
     // FIXME: Implement a better way to search for the mobile and desktop version witout creating 2 seprate functions
-
     const searchMobile = (e) => {
         e.preventDefault()
         const formElements = []
@@ -42,8 +42,6 @@ export default function Main({ location }) {
         const companyName = formElements[0].children[1].children[0].value.toLowerCase()
         const companySector = formElements[1].children[1].children[0].value.toLowerCase()
         const companyPrice = (formElements[2].children[1].children[0].value !== "") ? parseFloat(formElements[2].children[1].children[0].value) : 0
-
-        console.log(formElements)
 
         // The query is where you send the user data and recive the data from the backend
         var query = `query GetCompany($companyName: String, $companySector: String, $companyPrice: Float){
@@ -125,9 +123,7 @@ export default function Main({ location }) {
     }
 
 
-    return !showPage ? (
-        <Redirect noThrow to="../sign-in" />
-    ) : (
+    return (
 
         <>
             <div className="min-h-full">
@@ -318,12 +314,11 @@ export default function Main({ location }) {
                                             </Menu.Item>
                                             <Menu.Item>
                                                 {({ active }) => (
-                                                    <a
-                                                        href="#"
+                                                    <div
                                                         className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')}
                                                     >
                                                         Logout
-                                                    </a>
+                                                    </div>
                                                 )}
                                             </Menu.Item>
                                         </Menu.Items>

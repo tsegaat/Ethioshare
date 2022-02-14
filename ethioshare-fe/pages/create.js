@@ -1,7 +1,7 @@
 import React from "react";
 import Navbar from "../components/Navbar";
-import { Link } from "@reach/router";
-import { navigate } from "gatsby";
+import Link from 'next/link'
+// import { navigate } from "gatsby";
 import axios from "axios"
 
 export default function Create() {
@@ -31,7 +31,7 @@ export default function Create() {
 
         axios.post("http://localhost:8000/users/add", user).then(res => {
             if (res.data.userCreated) {
-                navigate('/main', { state: { showPage: true } })
+                // navigate('/main', { state: { showPage: true } })
             } else {
                 const cause = res.data.errorCause
                 if (cause === "email") {
@@ -98,7 +98,7 @@ export default function Create() {
                         <h2 className="mt-6 text-center text-3xl lg:text-4xl font-extrabold text-gray-900">Create your account</h2>
                         <p className="mt-2 text-center text-md text-gray-600">
                             Or{' '}
-                            <Link className="font-medium text-blue-600 hover:text-blue-700 hover:underline" to="../sign-in">sign in to your account</Link>
+                            <Link className="font-medium text-blue-600 hover:text-blue-700 hover:underline" href="../sign-in">sign in to your account</Link>
                         </p>
                     </div>
                     <form className="mt-8 space-y-6" onSubmit={submit} ref={formRef}>

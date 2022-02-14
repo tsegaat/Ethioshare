@@ -2,9 +2,9 @@ const router = require("express").Router()
 let Companies = require("../models/companies.model")
 const bcrypt = require('bcrypt')
 
+// TODO: Don't let just anyone come to the backend and request info just let the frontend request!
 router.route('/wd').get((req, res) => {
     Companies.find({ trending: true }, function (err, company) {
-        console.log(company)
         const filterdCompanies = []
         company.forEach(comp => {
             filterdCompanies.push({
@@ -17,7 +17,6 @@ router.route('/wd').get((req, res) => {
                 companySector: comp.companySector,
             })
         })
-        console.log(filterdCompanies)
         res.json(filterdCompanies)
     });
 })

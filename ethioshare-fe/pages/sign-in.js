@@ -1,8 +1,8 @@
 import React from "react";
 import Navbar from "../components/Navbar";
 import axios from "axios"
-import Link from 'gatsby-link'
-import { navigate } from 'gatsby'
+import Link from 'next/link'
+// import { navigate } from 'gatsby'
 
 export default function SignIn(props) {
     const passwordRef = React.createRef()
@@ -14,16 +14,13 @@ export default function SignIn(props) {
     const submit = (e) => {
         e.preventDefault()
         const user = { email: emailRef.current.value, password: passwordRef.current.value }
-        /* 
-            FIXME Ask tsega if the below statement is safe
-            Sending the password that the user typed back to the backend to check the password then sends back a res 
-        */
+
         axios.get(`http://localhost:8000/users/?email=${user.email}&pass=${user.password}`).then(res => {
             if (!(res.data.userExist)) {
                 warnings.current.value = "User does not exist"
             } else {
                 if (res.data.correct) {
-                    navigate('/main', { state: { showPage: true } })
+                    // navigate('/main', { state: { showPage: true, userToken: res.data.userToken } })
                     warnings.current.style = "display: none"
                 } else {
                     warnings.current.style = "display: block"
@@ -59,7 +56,7 @@ export default function SignIn(props) {
                         <h2 className="mt-6 text-center text-3xl lg:text-4xl font-extrabold text-gray-900">Sign in to your account</h2>
                         <p className="mt-2 text-center text-md text-gray-600">
                             Or{' '}
-                            <Link className="font-medium text-blue-600 hover:text-blue-700 hover:underline" to="../create">create your free account</Link>
+                            <Link className="font-medium text-blue-600 hover:text-blue-700 hover:underline" href="../create">create your free account</Link>
                         </p>
                     </div>
                     <form className="mt-8 space-y-6" onSubmit={submit}>
@@ -119,7 +116,7 @@ export default function SignIn(props) {
                             </div>
 
                             <div className="text-sm">
-                                <Link to="forgetpass" className="font-medium text-blue-600 hover:text-blue-700 hover:underline">
+                                <Link href="forgetpass" className="font-medium text-blue-600 hover:text-blue-700 hover:underline">
                                     Forgot your password?
                                 </Link>
                             </div>

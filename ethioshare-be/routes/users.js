@@ -5,17 +5,20 @@ const bcrypt = require('bcrypt')
 router.route('/').get((req, res) => {
     const email = req.query.email
     const password = req.query.pass
-    Users.find({ email: email }, function (err, user) {
+    Users.findOne({ email: email }, function (err, user) {
         if (user.length === 0) {
             res.json({
                 userExist: false
             })
         } else {
-            bcrypt.compare(password, user[0].password, (err, bol) => {
+            bcrypt.compare(password, user.password, (err, bol) => {
                 if (bol) {
                     res.json({
                         userExist: true,
-                        correct: true
+                        correct: true,
+                        // jsonwebtoken
+                        // TODO: change by an actual token
+                        userToken: user._id
                     })
                 } else {
                     res.json({
@@ -41,8 +44,11 @@ router.route('/add').post((req, res) => {
         }
         const newUser = new Users(user)
         newUser.save()
-            .then(() => res.json({ userCreated: true }))
+            .then((user) => {
+                res.json({ userCreated: true, userToken: user._id })
+            })
             .catch(err => {
+                console.log(err)
                 const error = err.keyPattern
                 const errorCause = Object.keys(error)[0]
                 res.json({ userCreated: false, errorCause: errorCause })

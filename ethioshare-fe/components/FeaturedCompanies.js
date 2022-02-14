@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "@reach/router";
+import Link from 'next/link'
 import axios from "axios"
 
 export default function FeaturedCompanies() {
@@ -87,7 +87,7 @@ export default function FeaturedCompanies() {
                                         </td>
                                         <td className="px-6 py-4 text-center">{company.companyExchangeScore}</td>
                                         <td className="px-6 py-4 whitespace-nowrap text-md text-center font-medium">
-                                            <Link to="create" className="text-blue-600 hover:text-blue-700 hover:underline">
+                                            <Link href="create" className="text-blue-600 hover:text-blue-700 hover:underline">
                                                 Exchange
                                             </Link>
                                         </td>
