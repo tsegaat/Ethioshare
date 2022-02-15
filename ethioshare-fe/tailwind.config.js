@@ -20,7 +20,7 @@ module.exports = {
         '6xl': ['3.75rem', '1.5em']
       },
       screens: {
-        'xs': '200px'
+        'xs': '300px',
       }
     },
   },

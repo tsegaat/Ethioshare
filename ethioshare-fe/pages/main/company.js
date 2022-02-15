@@ -1,23 +1,22 @@
 import React from "react";
-import { Fragment, useState } from 'react'
-import { StarIcon } from '@heroicons/react/solid'
-import { RadioGroup } from '@headlessui/react'
+import { Fragment, useState, useRef } from 'react'
+import Link from "next/link";
 import { BellIcon } from '@heroicons/react/outline'
 import { Menu, Transition } from '@headlessui/react'
 import { ChevronDownIcon } from '@heroicons/react/solid'
 
 const product = {
     name: 'Basic Tee 6-Pack',
-    price: '$192',
+    price: '192 ETB',
     sizes: [
-        { name: 'XXS', inStock: false },
-        { name: 'XS', inStock: true },
-        { name: 'S', inStock: true },
-        { name: 'M', inStock: true },
-        { name: 'L', inStock: true },
-        { name: 'XL', inStock: true },
-        { name: '2XL', inStock: true },
-        { name: '3XL', inStock: true },
+        { name: '50', inStock: true },
+        { name: '100', inStock: true },
+        { name: '150', inStock: true },
+        { name: '300', inStock: true },
+        { name: '400', inStock: true },
+        { name: '500', inStock: true },
+        { name: '600', inStock: true },
+        { name: '1000', inStock: true },
     ],
     description:
         'The Basic Tee 6-Pack allows you to fully express your vibrant personality with three grayscale options. Feeling adventurous? Put on a heather gray tee. Want to be a trendsetter? Try our exclusive colorway: "Black". Need to add an extra pop of color to your outfit? Our white tee has you covered.',
@@ -30,6 +29,12 @@ function classNames(...classes) {
 }
 
 export default function Company() {
+    const premiumRef = useRef()
+
+    const premiumOptions = (e) => {
+        const premium = e.target.innerHTML
+        premiumRef.current.value = premium
+    }
     return (
         <div className="flex flex-col flex-1">
             <div className="relative z-10 flex-shrink-0 flex h-16 border-gray-200 mx-2 lg:border-none">
@@ -98,12 +103,11 @@ export default function Company() {
                                     </Menu.Item>
                                     <Menu.Item>
                                         {({ active }) => (
-                                            <a
-                                                href="#"
+                                            <div
                                                 className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')}
                                             >
-                                                Settings
-                                            </a>
+                                                <Link href="/main/settings">Settings</Link>
+                                            </div>
                                         )}
                                     </Menu.Item>
                                     <Menu.Item>
@@ -134,73 +138,39 @@ export default function Company() {
                         <p className="text-3xl text-gray-900">{product.price}</p>
 
                         <form className="mt-10">
-                            <div>
-                                <h3 className="text-base text-gray-900 mb-1 font-medium">Premium</h3>
-
+                            <h3 className="text-base text-gray-900 mb-1 font-medium">Premium</h3>
+                            <div className="relative">
                                 <input
                                     type="number"
                                     className="rounded"
+                                    ref={premiumRef}
+                                    min={0}
                                 />
+                                <span className="absolute input-ETB-position">ETB</span>
                             </div>
 
                             {/* Sizes */}
                             <div>
-                                <RadioGroup className="mt-4">
-                                    <RadioGroup.Label className="sr-only">Choose a size</RadioGroup.Label>
+                                <div className="mt-4">
+                                    <label className="sr-only">Choose a Premium</label>
                                     <div className="grid grid-cols-4 gap-4 sm:grid-cols-8 lg:grid-cols-4">
                                         {product.sizes.map((size) => (
-                                            <RadioGroup.Option
+                                            <div
                                                 key={size.name}
                                                 value={size}
-                                                disabled={!size.inStock}
-                                                className={({ active }) =>
-                                                    classNames(
-                                                        size.inStock
-                                                            ? 'bg-white shadow-sm text-gray-900 cursor-pointer'
-                                                            : 'bg-gray-50 text-gray-200 cursor-not-allowed',
-                                                        active ? 'ring-2 ring-indigo-500' : '',
-                                                        'group relative border rounded-md py-1 px-2 flex items-center justify-center text-sm font-medium uppercase hover:bg-gray-50 focus:outline-none sm:flex-1 sm:py-3'
-                                                    )
-                                                }
+                                                onClick={premiumOptions}
+                                                className="bg-white shadow-sm text-gray-900 cursor-pointer group relative border rounded-md py-1 px-2 flex items-center justify-center text-sm font-medium uppercase hover:bg-gray-50 focus:outline-none sm:flex-1 sm:py-3"
                                             >
-                                                {({ active, checked }) => (
-                                                    <>
-                                                        <RadioGroup.Label as="p">{size.name}</RadioGroup.Label>
-                                                        {size.inStock ? (
-                                                            <div
-                                                                className={classNames(
-                                                                    active ? 'border' : 'border-2',
-                                                                    checked ? 'border-indigo-500' : 'border-transparent',
-                                                                    'absolute -inset-px rounded-md pointer-events-none'
-                                                                )}
-                                                                aria-hidden="true"
-                                                            />
-                                                        ) : (
-                                                            <div
-                                                                aria-hidden="true"
-                                                                className="absolute -inset-px rounded-md border-2 border-gray-200 pointer-events-none"
-                                                            >
-                                                                <svg
-                                                                    className="absolute inset-0 w-full h-full text-gray-200 stroke-2"
-                                                                    viewBox="0 0 100 100"
-                                                                    preserveAspectRatio="none"
-                                                                    stroke="currentColor"
-                                                                >
-                                                                    <line x1={0} y1={100} x2={100} y2={0} vectorEffect="non-scaling-stroke" />
-                                                                </svg>
-                                                            </div>
-                                                        )}
-                                                    </>
-                                                )}
-                                            </RadioGroup.Option>
+                                                {size.name}
+                                            </div>
                                         ))}
                                     </div>
-                                </RadioGroup>
+                                </div>
                             </div>
 
                             <button
                                 type="submit"
-                                className="mt-10 w-full bg-indigo-600 border border-transparent rounded-md py-3 px-8 flex items-center justify-center text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                                className="mt-10 w-full bg-blue-600 border border-transparent rounded-md py-3 px-8 flex items-center justify-center text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
                             >
                                 Submit Buy Request
                             </button>
@@ -209,19 +179,17 @@ export default function Company() {
 
                     <div className="py-10 lg:pt-6 lg:pb-16 lg:col-start-1 lg:col-span-2 lg:border-r lg:border-gray-200 lg:pr-8">
                         {/* Description and details */}
-                        <div className="flex">
-                            <div className="mr-4">
-                                <img height="200" width="300" src="https://tailwindui.com/img/ecommerce-images/product-page-02-featured-product-shot.jpg" />
+                        <div className="lg:flex items-center">
+                            <div className="flex-shrink-0 lg:w-48">
+                                <img className="object-contain" src="https://res.cloudinary.com/ethioshare/image/upload/v1642786392/companies/Yes%20Mineral%20Water.jpg" />
                             </div>
-                            <div>
+                            <div className="lg:ml-4">
                                 <h3 className="sr-only">Description</h3>
-
                                 <div className="space-y-6">
                                     <p className="text-base text-gray-900">{product.description}</p>
                                 </div>
                             </div>
                         </div>
-
                         <div className="mt-10">
                             <h2 className="text-lg font-medium text-gray-900">Exchange Score</h2>
 

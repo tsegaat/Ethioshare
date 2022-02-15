@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react'
+import Link from 'next/link'
 import { Fragment, useState, useRef } from 'react'
 import { Menu, Transition } from '@headlessui/react'
 import {
@@ -228,16 +229,24 @@ export default function Main() {
                     <hr className='bg-gray-100'></hr>
                     <div className="mb-6 pt-6">
                         <div className="px-2 space-y-1">
-                            {secondaryNavigation.map((item) => (
-                                <a
-                                    key={item.name}
-                                    href={item.href}
-                                    className="group flex items-center px-2 py-2 text-sm leading-6 font-medium rounded-md hover:text-white hover:bg-blue-600"
-                                >
-                                    <item.icon className="mr-4 h-6 w-6" aria-hidden="true" />
-                                    {item.name}
-                                </a>
-                            ))}
+                            <div
+                                className="group flex items-center px-2 py-2 text-sm leading-6 font-medium rounded-md hover:text-white hover:bg-blue-600"
+                            >
+                                <CogIcon className="mr-4 h-6 w-6" aria-hidden="true" />
+                                <Link href="/main/settings">Settings</Link>
+                            </div>
+                            <a
+                                className="group flex items-center px-2 py-2 text-sm leading-6 font-medium rounded-md hover:text-white hover:bg-blue-600"
+                            >
+                                <QuestionMarkCircleIcon className="mr-4 h-6 w-6" aria-hidden="true" />
+                                Help
+                            </a>
+                            <a
+                                className="group flex items-center px-2 py-2 text-sm leading-6 font-medium rounded-md hover:text-white hover:bg-blue-600"
+                            >
+                                <ShieldCheckIcon className="mr-4 h-6 w-6" aria-hidden="true" />
+                                Privacy
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -304,21 +313,22 @@ export default function Main() {
                                             </Menu.Item>
                                             <Menu.Item>
                                                 {({ active }) => (
-                                                    <a
-                                                        href="#"
+                                                    <div
                                                         className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')}
                                                     >
-                                                        Settings
-                                                    </a>
+                                                        <Link href="/main/settings">
+                                                            Settings
+                                                        </Link>
+                                                    </div>
                                                 )}
                                             </Menu.Item>
                                             <Menu.Item>
                                                 {({ active }) => (
-                                                    <div
+                                                    <a
                                                         className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')}
                                                     >
                                                         Logout
-                                                    </div>
+                                                    </a>
                                                 )}
                                             </Menu.Item>
                                         </Menu.Items>
