@@ -2,9 +2,6 @@ import React from 'react'
 import { Fragment, useState, useRef } from 'react'
 import { Switch, Transition, Menu } from '@headlessui/react'
 import { ChevronDownIcon } from '@heroicons/react/solid'
-import {
-    BellIcon,
-} from '@heroicons/react/outline'
 import Link from 'next/link'
 
 function classNames(...classes) {
@@ -44,30 +41,34 @@ export default function Settings() {
             <div>
                 {/* NavBar */}
                 <div className="relative z-10 flex-shrink-0 flex h-16 border-gray-200 mx-2 lg:border-none">
-                    <div className='absolute inset-y-0 left-0 flex pl-4 items-center'>
-                        <img
-                            className="h-8 w-auto lg:block hidden"
-                            src="https://tailwindui.com/img/logos/workflow-logo-indigo-500-mark-white-text.svg"
-                            alt="Easywire logo"
-                        />
-                        <img
-                            className="h-8 w-auto lg:hidden"
-                            src="https://tailwindui.com/img/logos/workflow-mark-indigo-600.svg"
-                            alt="Easywire logo"
-                        />
-                    </div>
+                    <Link href="/main">
+                        <div className='absolute inset-y-0 left-0 flex pl-4 items-center cursor-pointer'>
+                            <img
+                                className="h-8 w-auto lg:block hidden"
+                                src="https://tailwindui.com/img/logos/workflow-logo-indigo-500-mark-white-text.svg"
+                                alt="Easywire logo"
+                            />
+                            <img
+                                className="h-8 w-auto lg:hidden"
+                                src="https://tailwindui.com/img/logos/workflow-mark-indigo-600.svg"
+                                alt="Easywire logo"
+                            />
+                        </div>
+                    </Link>
                     {/* FIXME: When in Ipad show Logo with the text */}
                     <div className="flex-1 px-4 flex justify-between sm:px-3 lg:mx-auto lg:px-4">
                         <div className="flex-1 flex">
                         </div>
                         <div className="ml-4 flex items-center md:ml-6">
-                            <button
-                                type="button"
-                                className="bg-white p-1 rounded-full text-gray-400 hover:text-blue-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-                            >
-                                <span className="sr-only">View notifications</span>
-                                <BellIcon className="h-6 w-6" aria-hidden="true" />
-                            </button>
+                            <Link href="/main/buyer_requests">
+                                <button
+                                    type="button"
+                                    className="bg-white text-black p-1 rounded-full underline underline-offset-2 hover:text-blue-500 focus:outline-none focus:ring-2 focus:ring-offset-4 focus:ring-blue-500"
+                                >
+                                    <span className="sr-only">Buyer Requests</span>
+                                    Buyer Requests
+                                </button>
+                            </Link>
 
                             {/* Profile dropdown */}
                             <Menu as="div" className="ml-3 relative">
@@ -78,7 +79,7 @@ export default function Settings() {
                                             src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
                                             alt=""
                                         />
-                                        <span className="hidden ml-3 text-gray-700 text-sm font-medium lg:block">
+                                        <span className="hidden ml-3 text-gray-700 text-sm text-black font-medium lg:block">
                                             <span className="sr-only">Open user menu for </span>Emilia Birch
                                         </span>
                                         <ChevronDownIcon
@@ -97,16 +98,7 @@ export default function Settings() {
                                     leaveTo="transform opacity-0 scale-95"
                                 >
                                     <Menu.Items className="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
-                                        <Menu.Item>
-                                            {({ active }) => (
-                                                <a
-                                                    href="#"
-                                                    className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')}
-                                                >
-                                                    Your Profile
-                                                </a>
-                                            )}
-                                        </Menu.Item>
+
                                         <Menu.Item>
                                             {({ active }) => (
                                                 <div
@@ -131,6 +123,7 @@ export default function Settings() {
                         </div>
                     </div>
                 </div>
+                <hr className='bg-black'></hr>
                 {/* Content area */}
                 <div>
                     <div className="max-w-7xl mx-auto flex flex-col md:px-8 xl:px-0">

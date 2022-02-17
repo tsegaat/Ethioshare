@@ -3,7 +3,6 @@ import Link from 'next/link'
 import { Fragment, useState, useRef } from 'react'
 import { Menu, Transition } from '@headlessui/react'
 import {
-    BellIcon,
     CogIcon,
     QuestionMarkCircleIcon,
     ShieldCheckIcon,
@@ -12,12 +11,6 @@ import {
     ChevronDownIcon,
 } from '@heroicons/react/solid'
 import { Companies } from '../../components/main/companies'
-
-const secondaryNavigation = [
-    { name: 'Settings', href: '#', icon: CogIcon },
-    { name: 'Help', href: '#', icon: QuestionMarkCircleIcon },
-    { name: 'Privacy', href: '#', icon: ShieldCheckIcon },
-]
 
 function classNames(...classes) {
     return classes.filter(Boolean).join(' ')
@@ -253,26 +246,29 @@ export default function Main() {
 
                 <div className="lg:pl-64 flex flex-col flex-1">
                     <div className="relative z-10 flex-shrink-0 flex h-16 border-gray-200 lg:border-none">
-                        <div className='absolute inset-y-0 left-0 flex pl-4 items-center'>
-                            <img
-                                className="h-8 w-auto lg:hidden"
-                                src="https://tailwindui.com/img/logos/workflow-mark-indigo-600.svg"
-                                alt="Easywire logo"
-                            />
-                        </div>
+                        <Link href="/main">
+                            <div className='absolute inset-y-0 left-0 flex pl-4 items-center'>
+                                <img
+                                    className="h-8 w-auto lg:hidden"
+                                    src="https://tailwindui.com/img/logos/workflow-mark-indigo-600.svg"
+                                    alt="Easywire logo"
+                                />
+                            </div>
+                        </Link>
                         {/* FIXME: When in Ipad show Logo with the text */}
                         <div className="flex-1 px-4 flex justify-between sm:px-6 lg:max-w-6xl lg:mx-auto lg:px-8">
                             <div className="flex-1 flex">
                             </div>
                             <div className="ml-4 flex items-center md:ml-6">
-                                <button
-                                    type="button"
-                                    className="bg-white p-1 rounded-full text-gray-400 hover:text-blue-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-                                >
-                                    <span className="sr-only">View notifications</span>
-                                    <BellIcon className="h-6 w-6" aria-hidden="true" />
-                                </button>
-
+                                <Link href="/main/buyer_requests">
+                                    <button
+                                        type="button"
+                                        className="bg-white text-black p-1 rounded-full underline underline-offset-2 hover:text-blue-500 focus:outline-none focus:ring-2 focus:ring-offset-4 focus:ring-blue-500"
+                                    >
+                                        <span className="sr-only">Buyer Requests</span>
+                                        Buyer Requests
+                                    </button>
+                                </Link>
                                 {/* Profile dropdown */}
                                 <Menu as="div" className="ml-3 relative">
                                     <div>
@@ -301,16 +297,7 @@ export default function Main() {
                                         leaveTo="transform opacity-0 scale-95"
                                     >
                                         <Menu.Items className="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
-                                            <Menu.Item>
-                                                {({ active }) => (
-                                                    <a
-                                                        href="#"
-                                                        className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')}
-                                                    >
-                                                        Your Profile
-                                                    </a>
-                                                )}
-                                            </Menu.Item>
+
                                             <Menu.Item>
                                                 {({ active }) => (
                                                     <div
