@@ -2,26 +2,34 @@ import React from "react";
 import Navbar from "../components/Navbar";
 import axios from "axios"
 import Link from 'next/link'
-// import { navigate } from 'gatsby'
+import { useRouter } from "next/router";
+import Cookie from 'universal-cookie'
+const cookies = new Cookie();
 
-export default function SignIn(props) {
+
+export default function SignIn() {
     const passwordRef = React.createRef()
     const emailRef = React.createRef()
     const passwordShowIconRef = React.createRef()
     const passwordHideIconRef = React.createRef()
     const warnings = React.createRef()
+    const router = useRouter()
 
     const submit = (e) => {
         e.preventDefault()
         const user = { email: emailRef.current.value, password: passwordRef.current.value }
 
-        axios.get(`http://localhost:8000/users/?email=${user.email}&pass=${user.password}`).then(res => {
+        axios.post(`http://localhost:8000/users/login`, user).then(res => {
             if (!(res.data.userExist)) {
                 warnings.current.value = "User does not exist"
             } else {
                 if (res.data.correct) {
-                    // navigate('/main', { state: { showPage: true, userToken: res.data.userToken } })
+                    const token = res.data.userToken
+                    console.log(token)
+                    console.log(document.cookie)
+                    cookies.set("userToken", token)
                     warnings.current.style = "display: none"
+                    router.push('/main')
                 } else {
                     warnings.current.style = "display: block"
                     warnings.current.innerHTML = "Password is incorrect"

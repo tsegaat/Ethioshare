@@ -5,9 +5,9 @@ const bcrypt = require('bcrypt')
 // TODO: Don't let just anyone come to the backend and request info just let the frontend request!
 router.route('/wd').get((req, res) => {
     Companies.find({ trending: true }, function (err, company) {
-        const filterdCompanies = []
+        const filteredCompanies = []
         company.forEach(comp => {
-            filterdCompanies.push({
+            filteredCompanies.push({
                 _id: comp._id,
                 companyName: comp.companyName,
                 companyEmail: comp.companyEmail,
@@ -17,15 +17,15 @@ router.route('/wd').get((req, res) => {
                 companySector: comp.companySector,
             })
         })
-        res.json(filterdCompanies)
+        res.json(filteredCompanies)
     });
 })
 
 router.route('/d').get((req, res) => {
     Companies.find({}, function (err, company) {
-        const filterdCompanies = []
+        const filteredCompanies = []
         company.forEach(comp => {
-            filterdCompanies.push({
+            filteredCompanies.push({
                 companyName: comp.companyName,
                 companyEmail: comp.companyEmail,
                 companyLogo: comp.companyLogo,
@@ -35,7 +35,7 @@ router.route('/d').get((req, res) => {
                 companyDescription: comp.companyDescription
             })
         })
-        res.json(filterdCompanies)
+        res.json(filteredCompanies)
     });
 })
 

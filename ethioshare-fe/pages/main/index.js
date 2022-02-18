@@ -11,16 +11,16 @@ import {
     ChevronDownIcon,
 } from '@heroicons/react/solid'
 import { Companies } from '../../components/main/companies'
+import { useRouter } from "next/router";
+import Cookie from 'universal-cookie'
+
 
 function classNames(...classes) {
     return classes.filter(Boolean).join(' ')
 }
 
 export default function Main() {
-
-    // TODO: The logout function is not properly working... Watch videos of how to fix this
-
-
+    const router = useRouter()
     const [companiesParameters, setCompanyParameters] = useState([{ trending: true }])
     const mobileFormRef = useRef()
     const desktopFormRef = useRef()
@@ -116,7 +116,11 @@ export default function Main() {
             });
     }
 
-
+    const logout = () => {
+        const cookies = new Cookie();
+        cookies.remove('userToken')
+        router.push('/')
+    }
     return (
 
         <>
@@ -313,6 +317,7 @@ export default function Main() {
                                                 {({ active }) => (
                                                     <a
                                                         className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')}
+                                                        onClick={logout}
                                                     >
                                                         Logout
                                                     </a>

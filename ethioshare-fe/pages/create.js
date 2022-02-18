@@ -1,8 +1,10 @@
 import React from "react";
 import Navbar from "../components/Navbar";
 import Link from 'next/link'
-// import { navigate } from "gatsby";
 import axios from "axios"
+import { useRouter } from "next/router";
+import Cookie from 'universal-cookie'
+const cookies = new Cookie();
 
 export default function Create() {
     const passwordRef = React.createRef()
@@ -13,6 +15,7 @@ export default function Create() {
     const confirmPasswordHideIconRef = React.createRef()
     const warnings = React.createRef()
     const formRef = React.createRef()
+    const router = useRouter()
 
     const submit = (e) => {
         e.preventDefault();
@@ -29,9 +32,12 @@ export default function Create() {
 
         const user = { firstName, lastName, email, username, password }
 
-        axios.post("http://localhost:8000/users/add", user).then(res => {
+        axios.post("http://localhost:8000/users/create", user).then(res => {
             if (res.data.userCreated) {
-                // navigate('/main', { state: { showPage: true } })
+                const token = res.data.userToken
+                cookies.set("userToken", token)
+                warnings.current.style = "display: none"
+                router.push('/main')
             } else {
                 const cause = res.data.errorCause
                 if (cause === "email") {

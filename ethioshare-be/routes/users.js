@@ -1,10 +1,13 @@
 const router = require("express").Router()
 let Users = require("../models/users.model")
 const bcrypt = require('bcrypt')
+const jwt = require("jsonwebtoken")
+require("dotenv").config()
 
-router.route('/').get((req, res) => {
-    const email = req.query.email
-    const password = req.query.pass
+router.route('/login').post((req, res) => {
+    const email = req.body.email
+    const password = req.body.password
+    // TODO: Do more authentication
     Users.findOne({ email: email }, function (err, user) {
         if (user.length === 0) {
             res.json({
@@ -13,12 +16,12 @@ router.route('/').get((req, res) => {
         } else {
             bcrypt.compare(password, user.password, (err, bol) => {
                 if (bol) {
+                    const token = jwt.sign(user._id.toString(), process.env.ACCESS_TOKEN)
+                    // res.setHeader("Set-Cookie", `userToken=${token}`)
                     res.json({
                         userExist: true,
                         correct: true,
-                        // jsonwebtoken
-                        // TODO: change by an actual token
-                        userToken: user._id
+                        userToken: token
                     })
                 } else {
                     res.json({
@@ -31,21 +34,27 @@ router.route('/').get((req, res) => {
     });
 })
 
-router.route('/add').post((req, res) => {
+router.route('/create').post((req, res) => {
     const firstName = req.body.firstName
     const lastName = req.body.lastName
     const email = req.body.email
     const username = req.body.username
     const password = req.body.password
-
-    bcrypt.hash(password, 5, function (err, encyptedPassword) {
+    // TODO: Do more authentication
+    // TODO: handle all errors so the server never crashes
+    bcrypt.hash(password, 5, function (err, encryptedPassword) {
         const user = {
-            firstName, lastName, email, username, password: encyptedPassword
+            firstName, lastName, email, username, password: encryptedPassword
         }
         const newUser = new Users(user)
         newUser.save()
             .then((user) => {
-                res.json({ userCreated: true, userToken: user._id })
+                const token = jwt.sign(user._id.toString(), process.env.ACCESS_TOKEN)
+                res.setHeader("Set-Cookie", `userToken=${token}`)
+                res.json({
+                    userCreated: true,
+                    userToken: token
+                })
             })
             .catch(err => {
                 console.log(err)
