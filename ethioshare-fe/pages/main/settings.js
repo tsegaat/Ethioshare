@@ -4,12 +4,14 @@ import { Switch } from '@headlessui/react'
 import NavBar from '../../components/main/Navbar'
 import Cookies from 'universal-cookie'
 const cookie = new Cookies()
+import axios from 'axios'
 
 function classNames(...classes) {
     return classes.filter(Boolean).join(' ')
 }
 
 export default function Settings() {
+    const [users, setUsers] = useState({ firstName: "", lastName: "", username: "", email: "" })
     const [autoUpdateApplicantDataEnabled, setAutoUpdateApplicantDataEnabled] = useState(false)
     const [tabCurrent, setTabCurrent] = useState([true, false, false])
     const generalRef = useRef()
@@ -19,6 +21,12 @@ export default function Settings() {
         { name: 'General', href: '#', current: tabCurrent[0] },
         { name: 'Security', href: '#', current: tabCurrent[1] },
     ]
+
+    const userId = cookie.get('userId')
+    axios.post('http://localhost:8000/users/getUser', { userId }).then(res => {
+        // FIXME: Check what is coming from the backend before displaying it
+        setUsers(res.data)
+    })
 
     function tabClick(e) {
         const tabName = (e.target.innerHTML.charAt(0) === "<") ? e.target.value : e.target.innerHTML
@@ -107,7 +115,7 @@ export default function Settings() {
                                                             <div className="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4">
                                                                 <dt className="text-sm font-medium text-gray-500">Name</dt>
                                                                 <dd className="mt-1 flex text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                                                                    <span className="flex-grow">Chelsea Hagon</span>
+                                                                    <span className="flex-grow">{users.firstName + " " + users.lastName}</span>
                                                                     <span className="ml-4 flex-shrink-0">
                                                                         <button
                                                                             type="button"
@@ -124,7 +132,7 @@ export default function Settings() {
                                                                     <span className="flex-grow">
                                                                         <img
                                                                             className="h-8 w-8 rounded-full"
-                                                                            src="https://images.unsplash.com/photo-1550525811-e5869dd03032?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+                                                                            src={users.profilePicture}
                                                                             alt=""
                                                                         />
                                                                     </span>
@@ -150,7 +158,7 @@ export default function Settings() {
                                                             <div className="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4">
                                                                 <dt className="text-sm font-medium text-gray-500">Username</dt>
                                                                 <dd className="mt-1 flex text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                                                                    <span className="flex-grow">Chelsea</span>
+                                                                    <span className="flex-grow">{users.username}</span>
                                                                     <span className="ml-4 flex-shrink-0">
                                                                         <button
                                                                             type="button"
@@ -164,7 +172,7 @@ export default function Settings() {
                                                             <div className="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:pt-5">
                                                                 <dt className="text-sm font-medium text-gray-500">Email</dt>
                                                                 <dd className="mt-1 flex text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                                                                    <span className="flex-grow">chelsea.hagon@example.com</span>
+                                                                    <span className="flex-grow">{users.email}</span>
                                                                     <span className="ml-4 flex-shrink-0">
                                                                         <button
                                                                             type="button"

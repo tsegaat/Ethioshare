@@ -22,7 +22,8 @@ router.route('/login').post((req, res) => {
                     res.json({
                         userExist: true,
                         correct: true,
-                        userToken: token,
+                        userId: user._id.toString(),
+                        token,
                         refreshToken
                     })
                 } else {
@@ -55,7 +56,8 @@ router.route('/create').post((req, res) => {
                 const refreshToken = jwt.sign(user._id.toString(), process.env.REFRESH_TOKEN)
                 res.json({
                     userCreated: true,
-                    userToken: token,
+                    userId: user._id.toString(),
+                    token,
                     refreshToken
                 })
             })
@@ -67,6 +69,14 @@ router.route('/create').post((req, res) => {
             })
     });
 
+})
+
+router.route('/getUser').post((req, res) => {
+    const { userId } = req.body
+    Users.findOne({ _id: userId }).then((user) => {
+        const { firstName, lastName, email, username, profilePicture } = user
+        res.json({ firstName, lastName, email, username, profilePicture })
+    }).catch(() => res.sendStatus(404))
 })
 
 module.exports = router

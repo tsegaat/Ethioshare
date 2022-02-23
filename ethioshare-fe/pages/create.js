@@ -34,10 +34,10 @@ export default function Create() {
 
         axios.post("http://localhost:8000/users/create", user).then(res => {
             if (res.data.userCreated) {
-                const token = res.data.userToken
-                const refreshToken = res.data.refreshToken
+                const { token, refreshToken, userId } = res.data
                 cookies.set("accessToken", token)
                 cookies.set("refreshToken", refreshToken)
+                cookies.set("userId", userId)
                 warnings.current.style = "display: none"
                 router.push('/main')
             } else {

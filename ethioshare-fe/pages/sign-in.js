@@ -24,10 +24,10 @@ export default function SignIn() {
                 warnings.current.value = "User does not exist"
             } else {
                 if (res.data.correct) {
-                    const token = res.data.userToken
-                    const refreshToken = res.data.refreshToken
+                    const { token, refreshToken, userId } = res.data
                     cookies.set("accessToken", token)
                     cookies.set("refreshToken", refreshToken)
+                    cookies.set("userId", userId)
                     warnings.current.style = "display: none"
                     router.push('/main')
                 } else {

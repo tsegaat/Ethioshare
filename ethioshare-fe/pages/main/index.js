@@ -8,12 +8,10 @@ import {
 } from '@heroicons/react/outline'
 import Companies from '../../components/main/companies'
 import NavBar from '../../components/main/Navbar'
-import { useRouter } from "next/router";
 import Cookies from 'universal-cookie'
 const cookie = new Cookies
 
 export default function Main() {
-    console.log(cookie.get('accessToken'))
     const [companiesParameters, setCompanyParameters] = useState([{ trending: true }])
     const mobileFormRef = useRef()
     const desktopFormRef = useRef()

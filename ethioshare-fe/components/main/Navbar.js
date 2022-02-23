@@ -1,9 +1,11 @@
-import { React, Fragment } from "react";
+import { React, Fragment, useState } from "react";
 import Link from "next/link";
 import { Menu, Transition } from '@headlessui/react'
 import { ChevronDownIcon } from '@heroicons/react/solid'
 import Cookie from 'universal-cookie'
 import { useRouter } from "next/router";
+import axios from "axios"
+
 
 function classNames(...classes) {
     return classes.filter(Boolean).join(' ')
@@ -12,11 +14,18 @@ function classNames(...classes) {
 const NavBar = ({ main }) => {
     const router = useRouter()
     const cookies = new Cookie();
+    const userId = cookies.get('userId')
+    const [user, setUser] = useState({ firstName: "", lastName: "" })
     const logout = () => {
         cookies.remove('accessToken')
         cookies.remove('refreshToken')
         router.push('/')
     }
+    axios.post('http://localhost:8000/users/getUser', { userId }).then((res) => {
+        const { firstName, lastName, profilePicture } = res.data
+        setUser({ firstName, lastName, profilePicture })
+    })
+
 
     return (!main) ? (
         <div className="relative z-10 flex-shrink-0 flex h-16 border-gray-200 mx-2 lg:border-none">
@@ -55,11 +64,11 @@ const NavBar = ({ main }) => {
                             <Menu.Button className="max-w-xs bg-white rounded-full flex items-center text-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 lg:p-2 lg:rounded-md lg:hover:bg-gray-50">
                                 <img
                                     className="h-8 w-8 rounded-full"
-                                    src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+                                    src={user.profilePicture}
                                     alt=""
                                 />
                                 <span className="hidden ml-3 text-gray-700 text-sm text-black font-medium lg:block">
-                                    <span className="sr-only">Open user menu for </span>Emilia Birch
+                                    <span className="sr-only">Open user menu for </span>{user.firstName + " " + user.lastName}
                                 </span>
                                 <ChevronDownIcon
                                     className="hidden flex-shrink-0 ml-1 h-5 w-5 text-gray-400 lg:block"
@@ -134,11 +143,11 @@ const NavBar = ({ main }) => {
                             <Menu.Button className="max-w-xs bg-white rounded-full flex items-center text-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 lg:p-2 lg:rounded-md lg:hover:bg-gray-50">
                                 <img
                                     className="h-8 w-8 rounded-full"
-                                    src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+                                    src={user.profilePicture}
                                     alt=""
                                 />
                                 <span className="hidden ml-3 text-gray-700 text-sm font-medium lg:block">
-                                    <span className="sr-only">Open user menu for </span>Emilia Birch
+                                    <span className="sr-only">Open user menu for </span>{user.firstName + " " + user.lastName}
                                 </span>
                                 <ChevronDownIcon
                                     className="hidden flex-shrink-0 ml-1 h-5 w-5 text-gray-400 lg:block"
