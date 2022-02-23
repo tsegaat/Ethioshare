@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from "react";
 import Link from "next/router"
 import axios from "axios"
-// import { navigate } from 'gatsby'
 import { CurrencyDollarIcon } from '@heroicons/react/solid'
 
 
-export function Companies({ name, companies }) {
+export default function Companies({ name, companies }) {
     // FIXME Not working for some reason!
     const [trendingCompanies, setTrendingCompanies] = useState([])
     const fetchData = () => {

@@ -4,6 +4,7 @@ import FeaturedCompanies from "../components/FeaturedCompanies"
 import About from "../components/About"
 import OfferShares from "../components/OfferShares"
 
+
 export default function MainPage() {
   return (
     <>

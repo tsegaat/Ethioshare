@@ -25,9 +25,9 @@ export default function SignIn() {
             } else {
                 if (res.data.correct) {
                     const token = res.data.userToken
-                    console.log(token)
-                    console.log(document.cookie)
-                    cookies.set("userToken", token)
+                    const refreshToken = res.data.refreshToken
+                    cookies.set("accessToken", token)
+                    cookies.set("refreshToken", refreshToken)
                     warnings.current.style = "display: none"
                     router.push('/main')
                 } else {

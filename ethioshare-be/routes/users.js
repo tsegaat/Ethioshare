@@ -9,19 +9,21 @@ router.route('/login').post((req, res) => {
     const password = req.body.password
     // TODO: Do more authentication
     Users.findOne({ email: email }, function (err, user) {
-        if (user.length === 0) {
+        if (user === null) {
             res.json({
                 userExist: false
             })
         } else {
             bcrypt.compare(password, user.password, (err, bol) => {
                 if (bol) {
-                    const token = jwt.sign(user._id.toString(), process.env.ACCESS_TOKEN)
-                    // res.setHeader("Set-Cookie", `userToken=${token}`)
+
+                    const token = jwt.sign({ userId: user._id.toString() }, process.env.ACCESS_TOKEN)
+                    const refreshToken = jwt.sign({ userId: user._id.toString() }, process.env.REFRESH_TOKEN, { expiresIn: '1d' })
                     res.json({
                         userExist: true,
                         correct: true,
-                        userToken: token
+                        userToken: token,
+                        refreshToken
                     })
                 } else {
                     res.json({
@@ -50,10 +52,11 @@ router.route('/create').post((req, res) => {
         newUser.save()
             .then((user) => {
                 const token = jwt.sign(user._id.toString(), process.env.ACCESS_TOKEN)
-                res.setHeader("Set-Cookie", `userToken=${token}`)
+                const refreshToken = jwt.sign(user._id.toString(), process.env.REFRESH_TOKEN)
                 res.json({
                     userCreated: true,
-                    userToken: token
+                    userToken: token,
+                    refreshToken
                 })
             })
             .catch(err => {
