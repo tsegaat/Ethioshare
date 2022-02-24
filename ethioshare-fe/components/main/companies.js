@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import Link from "next/router"
+import Link from "next/link"
 import axios from "axios"
 import { CurrencyDollarIcon } from '@heroicons/react/solid'
 
@@ -86,16 +86,17 @@ export default function Companies({ name, companies }) {
                                         </td>
                                         <td className="px-6 py-4 text-center">{company.companyExchangeScore.toString() + "%"}</td>
                                         <td className="px-6 py-4 whitespace-nowrap text-md text-center font-medium">
-                                            {/* <Link href="/main/companies"> */}
-                                            <button
-                                                type="button"
-                                                className="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-                                            // onClick={() => navigate("/main/company", { state: { company: company._id } })}
-                                            >
-                                                Send<br />Request
-                                                <CurrencyDollarIcon className="ml-3 -mr-1 h-5 w-5" aria-hidden="true" />
-                                            </button>
-                                            {/* </Link> */}
+                                            <Link href={{
+                                                pathname: "/main/company",
+                                                query: { companyId: company._id }
+                                            }}>
+                                                <button
+                                                    type="button"
+                                                    className="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"                                            >
+                                                    Send<br />Request
+                                                    <CurrencyDollarIcon className="ml-3 -mr-1 h-5 w-5" aria-hidden="true" />
+                                                </button>
+                                            </Link >
                                         </td>
                                     </tr>
                                 )) :
@@ -120,16 +121,18 @@ export default function Companies({ name, companies }) {
                                             </td>
                                             <td className="px-6 py-4 text-center">{company.companyExchangeScore}</td>
                                             <td className="px-6 py-4 whitespace-nowrap text-md text-center font-medium">
-                                                {/* <Link href="/main/company"> */}
-                                                <button
-                                                    type="button"
-                                                    className="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-                                                // onClick={() => navigate("/main/company", { state: { company: company._id } })}
-                                                >
-                                                    Send<br />Request
-                                                    <CurrencyDollarIcon className="ml-3 -mr-1 h-5 w-5" aria-hidden="true" />
-                                                </button>
-                                                {/* </Link> */}
+                                                <Link href={{
+                                                    pathname: "/main/company",
+                                                    query: { companyId: company._id }
+                                                }}>
+                                                    <button
+                                                        type="button"
+                                                        className="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                                                    >
+                                                        Send<br />Request
+                                                        <CurrencyDollarIcon className="ml-3 -mr-1 h-5 w-5" aria-hidden="true" />
+                                                    </button>
+                                                </Link>
                                             </td>
                                         </tr>))
                                 }

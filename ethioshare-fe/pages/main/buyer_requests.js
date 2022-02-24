@@ -2,7 +2,6 @@ import React, { useEffect, Fragment, useState } from "react";
 import Link from 'next/link'
 import axios from "axios"
 import { CurrencyDollarIcon, SearchIcon, ChevronDownIcon } from '@heroicons/react/solid'
-import { Transition, Menu } from '@headlessui/react'
 import NavBar from "../../components/main/Navbar";
 
 function classNames(...classes) {

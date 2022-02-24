@@ -39,4 +39,13 @@ router.route('/d').get((req, res) => {
     });
 })
 
+router.route('/getCompany').post((req, res) => {
+    const { companyId } = req.body
+    if (req.body == {}) return res.sendStatus(404)
+    Companies.findOne({ _id: companyId }, function (err, company) {
+        const { companyName, companyLogo, companyPrice, companyExchangeScore, companyDescription } = company
+        res.json({ companyName, companyLogo, companyPrice, companyExchangeScore, companyDescription })
+    })
+})
+
 module.exports = router
