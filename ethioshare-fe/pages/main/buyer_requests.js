@@ -20,7 +20,7 @@ export default function BuyerRequests() {
                     companyName: company.companyName.charAt(0).toUpperCase() + company.companyName.slice(1),
                     companyEmail: company.companyEmail,
                     companySector: company.companySector.charAt(0).toUpperCase() + company.companySector.slice(1),
-                    // Can edit logo abit here
+                    // Can edit logo a bit here
                     companyLogo: company.companyLogo,
                     companyPrice: company.companyPrice.toString() + " " + "ETB",
                     companyExchangeScore: company.companyExchangeScore.toString() + "%",

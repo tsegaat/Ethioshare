@@ -22,13 +22,13 @@ mongoose.connect(uri, {
     useUnifiedTopology: true
 })
 
-const graphiqlRouter = require("./routes/graphql")
-app.use("/graphql", graphiqlRouter)
-
 const connection = mongoose.connection
 connection.once('open', () => {
     console.log("MangoDB database connection established")
 })
+
+const graphqlRouter = require("./routes/graphql")
+app.use("/graphql", graphqlRouter)
 
 const usersRouter = require("./routes/users")
 app.use("/users", usersRouter)
@@ -36,6 +36,10 @@ app.use("/users", usersRouter)
 const companiesRouter = require("./routes/companies")
 app.use("/companies", companiesRouter)
 
+const buyerRequestsRouter = require("./routes/buyer_requests")
+app.use("/buyerRequests", buyerRequestsRouter)
+
 app.listen(PORT, () => {
     console.log(`The server is running on port ${PORT}`)
 })
+

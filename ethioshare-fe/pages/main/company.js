@@ -1,15 +1,16 @@
 import React from "react";
 import { Fragment, useState, useRef } from 'react'
-import Link from "next/link";
 import { useRouter } from "next/router";
 import NavBar from '../../components/main/Navbar'
 import axios from "axios";
+import Cookie from 'universal-cookie'
+
 
 export default function Company() {
-    const router = useRouter()
-    const { companyId } = router.query
+    const companyId = localStorage.companyId
     const premiumRef = useRef()
     const [company, setCompany] = useState({ companyName: "", companyPrice: "", companyDescription: "", companyExchangeScore: "" })
+    const route = useRouter()
 
     const premiumOptions = (e) => {
         const premium = e.target.innerHTML
@@ -21,7 +22,6 @@ export default function Company() {
         setCompany(company)
     })
 
-    console.log(company)
     const companyDict = {
         name: company.companyName.charAt(0).toUpperCase() + company.companyName.slice(1),
         price: company.companyPrice + " " + "ETB",
@@ -41,6 +41,23 @@ export default function Company() {
             `Write about what exchange score is here? The exchange score for this company is ${company.companyExchangeScore.toString() + "%"}`,
     }
 
+    const submit = (e) => {
+        e.preventDefault()
+        const companyPremium = premiumRef.current.value
+        const cookies = new Cookie();
+        const userId = cookies.get('userId')
+        const companyId = localStorage.companyId
+
+        const data = { companyPremium, userId, companyId }
+        axios.post('http://localhost:8000/buyerRequests/add', data).then(res => {
+            if (res.data.buyerRequestCreated) {
+                //FIXME:Something telling the user that the buyerRequest has been created
+                route.push("/main")
+            } else {
+                //FIXME:Something telling the user that the buyerRequest has not been created
+            }
+        })
+    }
 
     return (
         <div className="flex flex-col flex-1">
@@ -58,7 +75,7 @@ export default function Company() {
                         <h2 className="sr-only">Product information</h2>
                         <p className="text-3xl text-gray-900">{companyDict.price}</p>
 
-                        <form className="mt-10">
+                        <form className="mt-10" onSubmit={submit}>
                             <h3 className="text-base text-gray-900 mb-1 font-medium">Premium</h3>
                             <div className="relative">
                                 <input
