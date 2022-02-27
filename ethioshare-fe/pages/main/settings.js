@@ -1,19 +1,26 @@
-import React from 'react'
+import React, { Fragment } from 'react'
 import { useState, useRef } from 'react'
+import axios from 'axios'
+import Cookies from 'universal-cookie'
+
+import { Dialog, Transition } from '@headlessui/react'
 import { Switch } from '@headlessui/react'
 import NavBar from '../../components/main/Navbar'
-import Cookies from 'universal-cookie'
-const cookie = new Cookies()
-import axios from 'axios'
+import FieldModal from '../../components/main/FieldSettings'
 
+const cookie = new Cookies()
 function classNames(...classes) {
     return classes.filter(Boolean).join(' ')
 }
+const userId = cookie.get('userId')
+
 
 export default function Settings() {
     const [users, setUsers] = useState({ firstName: "", lastName: "", username: "", email: "" })
     const [autoUpdateApplicantDataEnabled, setAutoUpdateApplicantDataEnabled] = useState(false)
     const [tabCurrent, setTabCurrent] = useState([true, false, false])
+    const [open, setOpen] = useState(false)
+    const [field, setField] = useState({ name: "Username" })
     const generalRef = useRef()
     const securityRef = useRef()
 
@@ -22,7 +29,6 @@ export default function Settings() {
         { name: 'Security', href: '#', current: tabCurrent[1] },
     ]
 
-    const userId = cookie.get('userId')
     axios.post('http://localhost:8000/users/getUser', { userId }).then(res => {
         // FIXME: Check what is coming from the backend before displaying it
         setUsers(res.data)
@@ -30,11 +36,11 @@ export default function Settings() {
 
     function tabClick(e) {
         const tabName = (e.target.innerHTML.charAt(0) === "<") ? e.target.value : e.target.innerHTML
-        const tabBools = [false, false, false]
+        const tabBool = [false, false, false]
         tabs.map((tab, index) => {
             if (tab.name == tabName) {
-                tabBools[index] = true
-                setTabCurrent(tabBools)
+                tabBool[index] = true
+                setTabCurrent(tabBool)
                 if (index == 0) {
                     generalRef.current.style = "display: block"
                     securityRef.current.style = "display: none"
@@ -45,9 +51,68 @@ export default function Settings() {
             }
         })
     }
+
+    function openModal(fieldName) {
+        const name = fieldName.charAt(0).toUpperCase() + fieldName.slice(1)
+        setField({ name })
+        setOpen(true)
+    }
+
     return (
         <>
             <div>
+                {/* Settings Modal */}
+                <Transition.Root show={true} as={Fragment}>
+                    <Dialog as="div" className="fixed z-10 inset-0 overflow-y-auto" onClose={setOpen}>
+                        <div className="flex items-end justify-center min-h-[70vh] pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+                            <Transition.Child
+                                as={Fragment}
+                                enter="ease-out duration-300"
+                                enterFrom="opacity-0"
+                                enterTo="opacity-100"
+                                leave="ease-in duration-200"
+                                leaveFrom="opacity-100"
+                                leaveTo="opacity-0"
+                            >
+                                <Dialog.Overlay className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
+                            </Transition.Child>
+
+                            {/* This element is to trick the browser into centering the modal contents. */}
+                            <span className="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">
+                                &#8203;
+                            </span>
+                            <Transition.Child
+                                as={Fragment}
+                                enter="ease-out duration-300"
+                                enterFrom="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+                                enterTo="opacity-100 translate-y-0 sm:scale-100"
+                                leave="ease-in duration-200"
+                                leaveFrom="opacity-100 translate-y-0 sm:scale-100"
+                                leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+                            >
+                                <div className="inline-block align-bottom bg-white rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-sm sm:w-full sm:p-6">
+                                    <div>
+                                        <div className="mt-3 text-center sm:mt-5">
+                                            <Dialog.Title as="h3" className="text-xl leading-6 font-medium text-gray-900">
+                                                {"Change" + " " + field.name}
+                                            </Dialog.Title>
+                                            <FieldModal field={field} />
+                                        </div>
+                                    </div>
+                                    <div className="mt-8 sm:mt-6">
+                                        <button
+                                            type="button"
+                                            className="inline-flex justify-center w-full rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-600 text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:text-sm"
+                                        >
+                                            Submit
+                                        </button>
+                                    </div>
+                                </div>
+                            </Transition.Child>
+                        </div>
+                    </Dialog>
+                </Transition.Root>
+
                 {/* NavBar */}
                 <NavBar />
                 <hr className='bg-black'></hr>
@@ -120,6 +185,7 @@ export default function Settings() {
                                                                         <button
                                                                             type="button"
                                                                             className="bg-white rounded-md font-medium text-blue-600 hover:text-blue-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                                                                            onClick={() => openModal("name")}
                                                                         >
                                                                             Update
                                                                         </button>
@@ -140,6 +206,7 @@ export default function Settings() {
                                                                         <button
                                                                             type="button"
                                                                             className="bg-white rounded-md font-medium text-blue-600 hover:text-blue-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                                                                            onClick={() => openModal("profilePicture")}
                                                                         >
                                                                             Update
                                                                         </button>
@@ -149,6 +216,7 @@ export default function Settings() {
                                                                         <button
                                                                             type="button"
                                                                             className="bg-white rounded-md font-medium text-blue-600 hover:text-blue-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                                                                            onClick={() => openModal("removeProfilePicture")}
                                                                         >
                                                                             Remove
                                                                         </button>
@@ -163,6 +231,7 @@ export default function Settings() {
                                                                         <button
                                                                             type="button"
                                                                             className="bg-white rounded-md font-medium text-blue-600 hover:text-blue-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                                                                            onClick={() => openModal("username")}
                                                                         >
                                                                             Update
                                                                         </button>
@@ -177,6 +246,7 @@ export default function Settings() {
                                                                         <button
                                                                             type="button"
                                                                             className="bg-white rounded-md font-medium text-blue-600 hover:text-blue-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                                                                            onClick={() => openModal("email")}
                                                                         >
                                                                             Update
                                                                         </button>
@@ -204,6 +274,7 @@ export default function Settings() {
                                                                         <button
                                                                             type="button"
                                                                             className="bg-white rounded-md font-medium text-blue-600 hover:text-blue-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                                                                            onClick={() => openModal("language")}
                                                                         >
                                                                             Update
                                                                         </button>
@@ -218,17 +289,9 @@ export default function Settings() {
                                                                         <button
                                                                             type="button"
                                                                             className="bg-white rounded-md font-medium text-blue-600 hover:text-blue-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                                                                            onClick={() => openModal("birthday")}
                                                                         >
                                                                             Update
-                                                                        </button>
-                                                                        <span className="text-gray-300" aria-hidden="true">
-                                                                            |
-                                                                        </span>
-                                                                        <button
-                                                                            type="button"
-                                                                            className="bg-white rounded-md font-medium text-blue-600 hover:text-blue-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-                                                                        >
-                                                                            Remove
                                                                         </button>
                                                                     </span>
                                                                 </dd>

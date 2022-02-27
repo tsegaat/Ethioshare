@@ -26,6 +26,7 @@ router.route('/d').get((req, res) => {
         const filteredCompanies = []
         company.forEach(comp => {
             filteredCompanies.push({
+                _id: comp._id,
                 companyName: comp.companyName,
                 companyEmail: comp.companyEmail,
                 companyLogo: comp.companyLogo,
