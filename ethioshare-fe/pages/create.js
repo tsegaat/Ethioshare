@@ -58,13 +58,13 @@ export default function Create() {
         if (passwordRef.current.value !== confirmPasswordRef.current.value) {
             warnings.current.style = "display: block"
             warnings.current.innerHTML = "Passwords don't match"
-            const submitbutton = formRef.current.children[6]
-            submitbutton.disabled = true
+            const submitButton = formRef.current.children[6]
+            submitButton.disabled = true
         } else {
             warnings.current.style = "display: none"
             warnings.current.innerHTML = "Passwords don't match"
-            const submitbutton = formRef.current.children[6]
-            submitbutton.disabled = false
+            const submitButton = formRef.current.children[6]
+            submitButton.disabled = false
         }
     }
     // FIXME There is room to improve the redunduncy of this process use less refrences.
