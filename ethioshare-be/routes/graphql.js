@@ -1,10 +1,11 @@
 const { graphqlHTTP } = require("express-graphql")
 const { buildSchema } = require("graphql")
 let Companies = require("../models/companies.model")
+const Users = require("../models/users.model")
 
 const graphqlHandler = graphqlHTTP({
-    // The type company type is what is supposed to be retured after the search
-    // The RootQuery is the search function that searchs the Database and returns the type company
+    // The type company type is what is supposed to be returned after the search
+    // The RootQuery is the search function that searches the Database and returns the type company
     schema: buildSchema(`
         type Company {
             _id: ID!
@@ -23,9 +24,34 @@ const graphqlHandler = graphqlHTTP({
             companyPrice: Float
             companyDescription: String
         }
+        
+        type User {
+            firstName: String!
+            lastName: String!
+            email: String!
+            username: String!
+            profilePicture: String!
+        }
+
+        type Response {
+            status: Boolean!
+            reason: String
+        }
+
+        input UserInput {
+            _id: ID!
+            firstName: String
+            lastName: String
+            email: String
+            username: String
+            profilePicture: String
+            language: String
+            Birthday: String
+        }
 
         type RootQuery {
             company(companyInput: CompanyInput): [Company]!
+            changeUserSettings(userInput: UserInput): Response!
         }
 
         schema {
@@ -65,7 +91,27 @@ const graphqlHandler = graphqlHTTP({
                 }))
                 return companies
             }).catch(err => console.log(err))
+        },
+        changeUserSettings: (args) => {
+            const { _id, firstName, lastName, email, username, profilePicture, language, birthday } = args.userInput
+            const userInput = { firstName, lastName, email, username, profilePicture, language, birthday }
+            const filteredUserInput = {}
+            for (const [key, value] of Object.entries(userInput)) {
+                if (value !== undefined) {
+                    filteredUserInput[key] = value
+                }
+            }
+
+            return Users.findOneAndUpdate({ _id }, filteredUserInput).then(() => {
+                return { status: true }
+            }).catch((error) => {
+                if (error.codeName === "DuplicateKey") {
+                    return { status: false, reason: error.codeName }
+                }
+                return false
+            })
         }
+
     },
     graphiql: true
 })

@@ -46,8 +46,9 @@ router.route('/create').post((req, res) => {
     // TODO: Do more authentication
     // TODO: handle all errors so the server never crashes
     bcrypt.hash(password, 5, function (err, encryptedPassword) {
+        const language = "English"
         const user = {
-            firstName, lastName, email, username, password: encryptedPassword
+            firstName, lastName, email, username, password: encryptedPassword, language
         }
         const newUser = new Users(user)
         newUser.save()
@@ -74,8 +75,8 @@ router.route('/create').post((req, res) => {
 router.route('/getUser').post((req, res) => {
     const { userId } = req.body
     Users.findOne({ _id: userId }).then((user) => {
-        const { firstName, lastName, email, username, profilePicture } = user
-        res.json({ firstName, lastName, email, username, profilePicture })
+        const { firstName, lastName, email, username, profilePicture, language } = user
+        res.json({ firstName, lastName, email, username, profilePicture, language })
     }).catch(() => res.sendStatus(404))
 })
 

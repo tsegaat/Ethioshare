@@ -17,6 +17,7 @@ const NavBar = ({ main }) => {
     const userId = cookies.get('userId')
     const [user, setUser] = useState({ firstName: "", lastName: "" })
     const logout = () => {
+        cookies.remove('userId')
         cookies.remove('accessToken')
         cookies.remove('refreshToken')
         router.push('/')

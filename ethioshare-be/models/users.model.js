@@ -35,6 +35,10 @@ const usersSchema = new Schema({
         type: String,
         required: true,
         minlength: 8
+    },
+    language: {
+        type: String,
+        required: true
     }
 }, {
     timestamps: true,

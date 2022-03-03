@@ -1,9 +1,8 @@
 import React from "react";
-import { useState, useRef } from "react";
+import { useState } from "react";
 
 const FieldModal = ({ field }) => {
     const [profilePic, setProfilePic] = useState({ showDetails: "block", picture: false })
-    const body = useRef()
     const pPSubmit = (e) => {
         const file = e.target.files[0]
         const reader = new FileReader()
@@ -24,7 +23,7 @@ const FieldModal = ({ field }) => {
             setProfilePic({ showDetails: "none", picture: reader.result })
         }
     }
-    console.log(field)
+
     switch (field) {
         case "Name":
             return (
@@ -33,24 +32,22 @@ const FieldModal = ({ field }) => {
                         <div className="mt-1">
                             <input
                                 type="text"
-                                name="username"
-                                id="username"
+                                name="firstName"
+                                id="firstName"
                                 className="shadow-sm focus:ring-blue-500 focus:border-blue-500 block w-full sm:text-sm border-gray-300 rounded-md"
                                 placeholder={"First Name"}
+                                required
                             />
                         </div>
                         <div className="mt-5">
                             <input
                                 type="text"
-                                name="username"
-                                id="username"
+                                name="lastName"
+                                id="lastName"
                                 className="shadow-sm focus:ring-blue-500 focus:border-blue-500 block w-full sm:text-sm border-gray-300 rounded-md"
                                 placeholder={"Last Name"}
+                                required
                             />
-                        </div>
-
-                        <div className='mt-4 hidden'>
-                            <p className='text-sm text-left text-red-900'>Invalid Something</p>
                         </div>
                     </div>
                 </div>
@@ -83,7 +80,7 @@ const FieldModal = ({ field }) => {
                                                 className="relative cursor-pointer bg-white font-medium text-blue-600 hover:text-blue-500 focus-within:outline-none0"
                                             >
                                                 <span>Upload a file</span>
-                                                <input id="file-upload" name="file-upload" type="file" accept="image/png, image/jpeg, image/jpg, image/gif" className="sr-only" onChange={pPSubmit} />
+                                                <input id="file-upload" name="profilePic" type="file" accept="image/png, image/jpeg, image/jpg, image/gif" className="sr-only" onChange={pPSubmit} />
                                             </label>
                                             <p className="pl-1">or drag and drop</p>
                                         </div>
@@ -107,11 +104,9 @@ const FieldModal = ({ field }) => {
                                 id="username"
                                 className="shadow-sm focus:ring-blue-500 focus:border-blue-500 block w-full sm:text-sm border-gray-300 rounded-md"
                                 placeholder={"New Username"}
+                                required
+                                min={5}
                             />
-                        </div>
-
-                        <div className='mt-4 hidden'>
-                            <p className='text-sm text-left text-red-900'>Something</p>
                         </div>
                     </div>
                 </div>
@@ -122,26 +117,25 @@ const FieldModal = ({ field }) => {
                     <div className="mt-6">
                         <div className="mt-1">
                             <input
-                                type="text"
-                                name="username"
+                                type="email"
+                                name="email"
                                 id="username"
+                                autoComplete="email"
                                 className="shadow-sm focus:ring-blue-500 focus:border-blue-500 block w-full sm:text-sm border-gray-300 rounded-md"
                                 placeholder="New Email"
+                                required
                             />
                         </div>
 
                         <div className="mt-5">
                             <input
-                                type="text"
-                                name="username"
+                                type="email"
+                                name="confirmEmail"
                                 id="username"
                                 className="shadow-sm focus:ring-blue-500 focus:border-blue-500 block w-full sm:text-sm border-gray-300 rounded-md"
                                 placeholder="Confirm Email"
+                                required
                             />
-                        </div>
-
-                        <div className='mt-4 hidden'>
-                            <p className='text-sm text-left text-red-900'>{"Invalid Email"}</p>
                         </div>
                     </div>
                 </div>
@@ -157,7 +151,7 @@ const FieldModal = ({ field }) => {
                                 </label>
                                 <select
                                     id="location"
-                                    name="location"
+                                    name="language"
                                     className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md"
                                     defaultValue="English"
                                 >
@@ -165,10 +159,6 @@ const FieldModal = ({ field }) => {
                                     <option>Amharic</option>
                                 </select>
                             </div>
-                        </div>
-
-                        <div className='mt-4 hidden'>
-                            <p className='text-sm text-left text-red-900'>{"Invalid Email"}</p>
                         </div>
                     </div>
                 </div>
@@ -180,13 +170,11 @@ const FieldModal = ({ field }) => {
                         <div className="mt-1">
                             <input
                                 type="date"
-                                name="username"
-                                id="username"
+                                name="birthday"
+                                id="birthday"
                                 className="shadow-sm focus:ring-blue-500 focus:border-blue-500 block w-full sm:text-sm border-gray-300 rounded-md"
+                                required
                             />
-                        </div>
-                        <div className='mt-4 hidden'>
-                            <p className='text-sm text-left text-red-900'>{"Invalid Email"}</p>
                         </div>
                     </div>
                 </div>
@@ -198,35 +186,34 @@ const FieldModal = ({ field }) => {
                         <div className="mt-1">
                             <input
                                 type="password"
-                                name="password"
-                                id="password"
+                                name="currentPassword"
+                                id="currentPassword"
                                 className="shadow-sm focus:ring-blue-500 focus:border-blue-500 block w-full sm:text-sm border-gray-300 rounded-md"
                                 placeholder="Current Password"
+                                required
                             />
                         </div>
 
                         <div className="mt-5">
                             <input
                                 type="password"
-                                name="password"
-                                id="password"
+                                name="newPassword"
+                                id="newPassword"
                                 className="shadow-sm focus:ring-blue-500 focus:border-blue-500 block w-full sm:text-sm border-gray-300 rounded-md"
                                 placeholder="New Password"
+                                required
                             />
                         </div>
 
                         <div className="mt-5">
                             <input
                                 type="password"
-                                name="password"
-                                id="password"
+                                name="confirmPassword"
+                                id="confirmPassword"
                                 className="shadow-sm focus:ring-blue-500 focus:border-blue-500 block w-full sm:text-sm border-gray-300 rounded-md"
                                 placeholder="Confirm New Password"
+                                required
                             />
-                        </div>
-
-                        <div className='mt-4 hidden'>
-                            <p className='text-sm text-left text-red-900'>{"Invalid Email"}</p>
                         </div>
                     </div>
                 </div>

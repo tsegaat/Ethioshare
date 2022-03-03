@@ -4,7 +4,6 @@ import axios from 'axios'
 import Cookies from 'universal-cookie'
 
 import { Dialog, Transition } from '@headlessui/react'
-import { Switch } from '@headlessui/react'
 import NavBar from '../../components/main/Navbar'
 import FieldModal from '../../components/main/FieldSettings'
 
@@ -17,13 +16,12 @@ const userId = cookie.get('userId')
 
 export default function Settings() {
     const [users, setUsers] = useState({ firstName: "", lastName: "", username: "", email: "" })
-    const [autoUpdateApplicantDataEnabled, setAutoUpdateApplicantDataEnabled] = useState(false)
     const [tabCurrent, setTabCurrent] = useState([true, false, false])
     const [open, setOpen] = useState(false)
     const [field, setField] = useState({ name: "Username" })
     const generalRef = useRef()
     const securityRef = useRef()
-
+    const error = useRef()
     const tabs = [
         { name: 'General', href: '#', current: tabCurrent[0] },
         { name: 'Security', href: '#', current: tabCurrent[1] },
@@ -58,6 +56,168 @@ export default function Settings() {
         setOpen(true)
     }
 
+    function submitChanges(e) {
+        e.preventDefault()
+        const element = e.target
+        const [
+            firstName, lastName, username, email, confirmEmail, profilePic, language, birthday, oldPassword, newPassword, confirmPassword
+        ] = [
+                (element.firstName === undefined) ? "" : element.firstName.value.charAt(0).toUpperCase() + element.firstName.value.slice(1).toLowerCase(),
+                (element.lastName === undefined) ? "" : element.lastName.value.charAt(0).toUpperCase() + element.lastName.value.slice(1).toLowerCase(),
+                (element.username === undefined) ? "" : element.username.value.toLowerCase(),
+                (element.email === undefined) ? "" : element.email.value.toLowerCase(),
+                (element.confirmEmail === undefined) ? "" : element.confirmEmail.value.toLowerCase(),
+                (element.profilePic === undefined) ? "" : element.profilePic.value,
+                (element.language === undefined) ? "" : element.language.value.toLowerCase(),
+                (element.birthday === undefined) ? "" : new Date(element.birthday.value),
+                (element.currentPassword === undefined) ? "" : element.currentPassword.value,
+                (element.newPassword === undefined) ? "" : element.newPassword.value,
+                (element.confirmPassword === undefined) ? "" : element.confirmPassword.value,
+            ]
+
+        if (firstName !== "" && lastName !== "") {
+            if (/[^a-zA-Z]/.test(firstName)) error.current.innerHTML = "First name can't contain numbers or any special characters."
+            if (/[^a-zA-Z]/.test(lastName)) error.current.innerHTML = "Last name can't contain numbers or any special characters."
+            if (!/[^a-zA-Z]/.test(firstName) && !/[^a-zA-Z]/.test(lastName)) error.current.innerHTML = ""
+
+            if (error.current.innerHTML === "") {
+                var query = `query UpdateName($userId: ID!, $firstName: String!, $lastName: String!){
+                    changeUserSettings (userInput: {_id: $userId, firstName: $firstName, lastName: $lastName}){
+                      status
+                      reason
+                    }
+                  }`;
+
+                fetch('http://localhost:8000/graphql', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        query,
+                        variables: { userId, firstName, lastName }
+                    })
+                })
+                    .then(r => r.json())
+                    .then(data => {
+                        if (data.data.changeUserSettings.status) {
+                            setOpen(false)
+                        } else {
+                            if (data.data.changeUserSettings.reason === undefined) {
+                                error.current.innerHTML = "Network Error: Please try again."
+                            }
+                        }
+                    });
+
+            }
+        }
+
+        if (username !== "") {
+            if (error.current.innerHTML === "") {
+                var query = `query UpdateName($userId: ID!, $username: String!){
+                    changeUserSettings (userInput: {_id: $userId, username: $username}){
+                      status
+                      reason
+                    }
+                  }`;
+
+                fetch('http://localhost:8000/graphql', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        query,
+                        variables: { userId, username }
+                    })
+                })
+                    .then(r => r.json())
+                    .then(data => {
+                        if (data.data.changeUserSettings.status) {
+                            setOpen(false)
+                        } else {
+                            if (data.data.changeUserSettings.reason === "DuplicateKey") {
+                                error.current.innerHTML = "Username already taken"
+                            } else {
+                                error.current.innerHTML = "Network Error: Please try again."
+                            }
+                        }
+                    });
+            }
+        }
+
+        if (email !== "") {
+            if (email === users.email) error.current.innerHTML = "Email is the same with current email."
+            if (email !== confirmEmail) error.current.innerHTML = "Emails are different."
+            if (error.current.innerHTML === "") {
+                var query = `query UpdateName($userId: ID!, $email: String!){
+                    changeUserSettings (userInput: {_id: $userId, email: $email}){
+                      status
+                      reason
+                    }
+                  }`;
+
+                fetch('http://localhost:8000/graphql', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        query,
+                        variables: { userId, email }
+                    })
+                })
+                    .then(r => r.json())
+                    .then(data => {
+                        if (data.data.changeUserSettings.status) {
+                            setOpen(false)
+                        } else {
+                            if (data.data.changeUserSettings.reason === undefined) {
+                                error.current.innerHTML = "Network Error: Please try again."
+                            }
+                        }
+                    });
+            }
+        }
+
+        if (language !== "") {
+            if (error.current.innerHTML === "") {
+                var query = `query UpdateName($userId: ID!, $language: String!){
+                    changeUserSettings (userInput: {_id: $userId, language: $language}){
+                      status
+                      reason
+                    }
+                  }`;
+
+                fetch('http://localhost:8000/graphql', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        query,
+                        variables: { userId, language }
+                    })
+                })
+                    .then(r => r.json())
+                    .then(data => {
+                        if (data.data.changeUserSettings.status) {
+                            setOpen(false)
+                        } else {
+                            if (data.data.changeUserSettings.reason === undefined) {
+                                error.current.innerHTML = "Network Error: Please try again."
+                            }
+                        }
+                    });
+            }
+        }
+
+        if (birthday !== "") {
+            if (error.current.innerHTML === "") {
+                // Send a graphQL request to the backend
+            }
+        }
+    }
     return (
         <>
             <div>
@@ -91,22 +251,27 @@ export default function Settings() {
                                 leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
                             >
                                 <div className="inline-block align-bottom bg-white rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-sm sm:w-full sm:p-6">
-                                    <div>
-                                        <div className="mt-3 text-center sm:mt-5">
-                                            <Dialog.Title as="h3" className="text-xl leading-6 font-medium text-gray-900">
-                                                {"Change" + " " + field.name}
-                                            </Dialog.Title>
-                                            <FieldModal field={field.name} />
+                                    <form onSubmit={submitChanges}>
+                                        <div>
+                                            <div className="mt-3 text-center sm:mt-5">
+                                                <Dialog.Title as="h3" className="text-xl leading-6 font-medium text-gray-900">
+                                                    {"Change" + " " + field.name}
+                                                </Dialog.Title>
+                                                <FieldModal field={field.name} />
+                                                <div className='mt-4'>
+                                                    <p className='text-sm text-left text-red-900' ref={error}></p>
+                                                </div>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div className="mt-8 sm:mt-6">
-                                        <button
-                                            type="button"
-                                            className="inline-flex justify-center w-full rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-600 text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:text-sm"
-                                        >
-                                            Submit
-                                        </button>
-                                    </div>
+                                        <div className="mt-8 sm:mt-6">
+                                            <button
+                                                type="submit"
+                                                className="inline-flex justify-center w-full rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-600 text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:text-sm"
+                                            >
+                                                Submit
+                                            </button>
+                                        </div>
+                                    </form>
                                 </div>
                             </Transition.Child>
                         </div>
@@ -259,7 +424,7 @@ export default function Settings() {
                                                             <div className="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4">
                                                                 <dt className="text-sm font-medium text-gray-500">Language</dt>
                                                                 <dd className="mt-1 flex text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                                                                    <span className="flex-grow">English</span>
+                                                                    <span className="flex-grow">{users.language}</span>
                                                                     <span className="ml-4 flex-shrink-0">
                                                                         <button
                                                                             type="button"
@@ -352,3 +517,34 @@ export default function Settings() {
         </>
     )
 }
+
+
+/*
+var query = `query UpdateName($userId: ID!, $firstName: String!, $lastName: String!){
+                    changeUserSettings (userInput: {_id: $userId, firstName: $firstName, lastName: $lastName}){
+                      status
+                      reason
+                    }
+                  }`;
+
+                fetch('http://localhost:8000/graphql', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        query,
+                        variables: { userId, firstName, lastName }
+                    })
+                })
+                    .then(r => r.json())
+                    .then(data => {
+                        if (data.data.changeUserSettings.status) {
+                            setOpen(false)
+                        } else {
+                            if (data.data.changeUserSettings.reason === undefined) {
+                                error.current.innerHTML = "Network Error: Please try again."
+                            }
+                        }
+                    });
+*/
