@@ -201,6 +201,7 @@ const FieldModal = ({ field }) => {
                                 id="newPassword"
                                 className="shadow-sm focus:ring-blue-500 focus:border-blue-500 block w-full sm:text-sm border-gray-300 rounded-md"
                                 placeholder="New Password"
+                                minLength={8}
                                 required
                             />
                         </div>
@@ -212,6 +213,7 @@ const FieldModal = ({ field }) => {
                                 id="confirmPassword"
                                 className="shadow-sm focus:ring-blue-500 focus:border-blue-500 block w-full sm:text-sm border-gray-300 rounded-md"
                                 placeholder="Confirm New Password"
+                                minLength={8}
                                 required
                             />
                         </div>

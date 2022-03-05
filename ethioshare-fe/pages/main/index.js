@@ -72,7 +72,7 @@ export default function Main() {
         const companySector = formElements[1].children[1].children[0].value.toLowerCase()
         const companyPrice = (formElements[2].children[1].children[0].value !== "") ? parseFloat(formElements[2].children[1].children[0].value) : 0
 
-        // The query is where you send the user data and recive the data from the backend
+        // The query is where you send the user data and receive the data from the backend
         var query = `query GetCompany($companyName: String, $companySector: String, $companyPrice: Float){
             company(companyInput: {companyName: $companyName, companyPrice: $companyPrice, companySector: $companySector}){
                 _id

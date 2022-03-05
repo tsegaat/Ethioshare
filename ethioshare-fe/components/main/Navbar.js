@@ -1,4 +1,4 @@
-import { React, Fragment, useState } from "react";
+import { React, Fragment, useState, useEffect } from "react";
 import Link from "next/link";
 import { Menu, Transition } from '@headlessui/react'
 import { ChevronDownIcon } from '@heroicons/react/solid'
@@ -22,10 +22,14 @@ const NavBar = ({ main }) => {
         cookies.remove('refreshToken')
         router.push('/')
     }
-    axios.post('http://localhost:8000/users/getUser', { userId }).then((res) => {
-        const { firstName, lastName, profilePicture } = res.data
-        setUser({ firstName, lastName, profilePicture })
-    })
+
+    useEffect(() => {
+        axios.post('http://localhost:8000/users/getUser', { userId }).then((res) => {
+            const { firstName, lastName, profilePicture } = res.data
+            setUser({ firstName, lastName, profilePicture })
+        })
+    }, [])
+
 
 
     return (!main) ? (

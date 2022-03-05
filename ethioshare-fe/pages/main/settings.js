@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react'
+import React, { Fragment, useEffect } from 'react'
 import { useState, useRef } from 'react'
 import axios from 'axios'
 import Cookies from 'universal-cookie'
@@ -27,10 +27,13 @@ export default function Settings() {
         { name: 'Security', href: '#', current: tabCurrent[1] },
     ]
 
-    axios.post('http://localhost:8000/users/getUser', { userId }).then(res => {
-        // FIXME: Check what is coming from the backend before displaying it
-        setUsers(res.data)
-    })
+    useEffect(() => {
+        axios.post('http://localhost:8000/users/getUser', { userId }).then(res => {
+            // FIXME: Check what is coming from the backend before displaying it
+            setUsers(res.data)
+        })
+    }, [open])
+
 
     function tabClick(e) {
         const tabName = (e.target.innerHTML.charAt(0) === "<") ? e.target.value : e.target.innerHTML
@@ -62,9 +65,9 @@ export default function Settings() {
         const [
             firstName, lastName, username, email, confirmEmail, profilePic, language, birthday, oldPassword, newPassword, confirmPassword
         ] = [
-                (element.firstName === undefined) ? "" : element.firstName.value.charAt(0).toUpperCase() + element.firstName.value.slice(1).toLowerCase(),
-                (element.lastName === undefined) ? "" : element.lastName.value.charAt(0).toUpperCase() + element.lastName.value.slice(1).toLowerCase(),
-                (element.username === undefined) ? "" : element.username.value.toLowerCase(),
+                (element.firstName === undefined) ? "" : (element.firstName.value.charAt(0).toUpperCase() + element.firstName.value.slice(1).toLowerCase()).trim(),
+                (element.lastName === undefined) ? "" : (element.lastName.value.charAt(0).toUpperCase() + element.lastName.value.slice(1).toLowerCase()).trim(),
+                (element.username === undefined) ? "" : (element.username.value.toLowerCase()).trim(),
                 (element.email === undefined) ? "" : element.email.value.toLowerCase(),
                 (element.confirmEmail === undefined) ? "" : element.confirmEmail.value.toLowerCase(),
                 (element.profilePic === undefined) ? "" : element.profilePic.value,
@@ -111,6 +114,8 @@ export default function Settings() {
 
             }
         }
+
+        console.log(profilePic)
 
         if (username !== "") {
             if (error.current.innerHTML === "") {
@@ -215,6 +220,20 @@ export default function Settings() {
         if (birthday !== "") {
             if (error.current.innerHTML === "") {
                 // Send a graphQL request to the backend
+            }
+        }
+
+        if (oldPassword !== "" && newPassword !== "" && confirmPassword !== "") {
+            if (newPassword !== confirmPassword) error.current.innerHTML = "New Password not the same with the confirm password."
+            if (newPassword === confirmPassword) error.current.innerHTML = ""
+            if (error.current.innerHTML === "") {
+                axios.post('http://localhost:8000/users/changePassword', { userId, oldPassword, newPassword, confirmPassword }).then(res => {
+                    if (res.data.success) {
+                        setOpen(false)
+                    } else {
+                        error.current.innerHTML = "Incorrect Password."
+                    }
+                })
             }
         }
     }

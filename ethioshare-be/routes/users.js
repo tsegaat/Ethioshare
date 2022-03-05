@@ -80,4 +80,25 @@ router.route('/getUser').post((req, res) => {
     }).catch(() => res.sendStatus(404))
 })
 
+router.route('/changePassword').post(async (req, res) => {
+    const { userId, oldPassword, newPassword } = req.body
+
+    Users.findOne({ _id: userId }, { password: 1, _id: 0 }, function (err, user) {
+        const { password } = user
+        bcrypt.compare(oldPassword, password).then((val) => {
+            if (val) {
+                bcrypt.hash(newPassword, 5, (err, encNewPass) => {
+                    Users.findOneAndUpdate({ _id: userId }, { password: encNewPass }).then(() => {
+                        res.json({ success: true })
+                    })
+                })
+            } else res.json({ success: val })
+        })
+    })
+
+
+    // const value = await checkPass()
+
+})
+
 module.exports = router
